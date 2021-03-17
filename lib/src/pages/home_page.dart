@@ -47,10 +47,11 @@ class _HomePageState extends State<HomePage> {
   _backgroundApp(context) {
     return Container(
       decoration: BoxDecoration(
-          image: DecorationImage(
-              image:
-                  NetworkImage('https://image.tmdb.org/t/p/w500/$_posterPath'),
-              fit: BoxFit.cover)),
+        color: Colors.black,
+        image: DecorationImage(
+            image: NetworkImage('https://image.tmdb.org/t/p/w500/$_posterPath'),
+            fit: BoxFit.cover),
+      ),
       width: double.infinity,
       height: double.infinity,
       // color: Colors.red,
@@ -105,6 +106,7 @@ class _HomePageState extends State<HomePage> {
           // print(snapshot);
 
           return PageView.builder(
+            controller: PageController(viewportFraction: 0.8),
             itemCount: snapshot.data.length,
             itemBuilder: (context, index) =>
                 _verMovie(snapshot.data[index], context),
@@ -124,11 +126,11 @@ class _HomePageState extends State<HomePage> {
         children: [
           Padding(
             padding:
-                const EdgeInsets.symmetric(vertical: 8.0, horizontal: 20.0),
+                const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0),
             child: ClipRRect(
                 borderRadius: BorderRadius.circular(15.0),
                 child: FadeInImage(
-                    height: MediaQuery.of(context).size.height * .65,
+                    height: MediaQuery.of(context).size.height * .6,
                     fit: BoxFit.cover,
                     placeholder: AssetImage('assets/loading.gif'),
                     image: NetworkImage(
@@ -136,6 +138,7 @@ class _HomePageState extends State<HomePage> {
           ),
           Text(
             movie.title,
+            textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.subtitle1,
           ),
         ],
