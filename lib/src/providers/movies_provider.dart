@@ -1,11 +1,15 @@
 import 'package:dio/dio.dart';
 
+import 'package:the_movie_db/src/models/casts_model.dart';
 import 'package:the_movie_db/src/models/movies_model.dart';
+
+export 'package:the_movie_db/src/models/casts_model.dart';
+export 'package:the_movie_db/src/models/movies_model.dart';
 
 class MoviesProvider {
   final _url = 'https://api.themoviedb.org/3/';
   final _apiKey = '0e685fd77fb3d76874a3ac26e0db8a4b';
-  final _lang = 'es-AR';
+  final _lang = 'es-ES';
   final imagePath = 'https://image.tmdb.org/t/p/w500/';
 
   int _page = 1;
@@ -72,11 +76,28 @@ class MoviesProvider {
     return movies.items;
   }
 
-  Future<List<Movie>> getLatest() {
+  Future<List<Movie>> getLatest() async {
     //movie/latest?api_key=<<api_key>>&language=en-US
 
-    List<Movie> a = [];
-    return Future.value(a);
+    final path = 'movie/latest';
+    Response response;
+
+    try {
+      response = await dio.get('$_url$path', queryParameters: {});
+    } catch (e) {
+      if (e.response != null) {
+        print(e.response.data);
+        print(e.response.headers);
+        print(e.response.request);
+      } else {
+        // Something happened in setting up or sending the request that triggered an Error
+        print(e.request);
+        print(e.message);
+      }
+    }
+
+    var movies = Movies.fromJson(response.data['results']);
+    return movies.items;
   }
 
   Future<List<Movie>> search() {
@@ -90,4 +111,51 @@ class MoviesProvider {
     Movie a = new Movie(); // = [];
     return Future.value(a);
   }
+
+  Future<List<Movie>> getSimilar(Movie movie) async {
+    final path = 'movie/${movie.id}/similar';
+    Response response;
+
+    try {
+      response = await dio.get('$_url$path', queryParameters: {});
+    } catch (e) {
+      if (e.response != null) {
+        print(e.response.data);
+        print(e.response.headers);
+        print(e.response.request);
+      } else {
+        // Something happened in setting up or sending the request that triggered an Error
+        print(e.request);
+        print(e.message);
+      }
+    }
+
+    var movies = Movies.fromJson(response.data['results']);
+    return movies.items;
+  }
+
+
+  Future<List<Cast>> getCast(Movie movie) async {
+    
+    final path = 'movie/${movie.id}/credits';
+    Response response;
+
+    try {
+      response = await dio.get('$_url$path', queryParameters: {});
+    } catch (e) {
+      if (e.response != null) {
+        print(e.response.data);
+        print(e.response.headers);
+        print(e.response.request);
+      } else {
+        // Something happened in setting up or sending the request that triggered an Error
+        print(e.request);
+        print(e.message);
+      }
+    }
+
+    var casts = Casts.fromJson(response.data['cast']);
+    return casts.items;
+  }
+
 }

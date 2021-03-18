@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:the_movie_db/src/models/movies_model.dart';
+// import 'package:the_movie_db/src/models/movies_model.dart';
 import 'package:the_movie_db/src/providers/movies_provider.dart';
 
 import 'package:the_movie_db/src/widgets/video_player.dart';
@@ -44,9 +44,10 @@ class DetailsPage extends StatelessWidget {
 
   _posterInfo() {
     return Container(
-      color: Colors.blue,
+      // color: Colors.blue,
       padding: const EdgeInsets.all(8.0),
       child: Row(
+        // crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _imagen(),
           SizedBox(width: 10),
@@ -57,7 +58,9 @@ class DetailsPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   _titulo(),
+                  SizedBox(height: 5),
                   _generos(),
+                  SizedBox(height: 5),
                   _promedio(),
                 ]),
           ),
@@ -103,39 +106,40 @@ class DetailsPage extends StatelessWidget {
   }
 
   _actoresListado() {
-    List<Widget> tmpLstWidgets = [];
+    return FutureBuilder(
+        future: moviesProvider.getCast(movie),
+        builder: (context, AsyncSnapshot<List<Cast>> snapshot) {
+          if (snapshot.hasError) {
+            return Center(child: Text("${snapshot.error}"));
+          } else if (!snapshot.hasData) {
+            return Center(child: CircularProgressIndicator());
+          }
 
-    tmpLstWidgets.add(_actor());
-    tmpLstWidgets.add(_actor());
-    tmpLstWidgets.add(_actor());
-    tmpLstWidgets.add(_actor());
-    tmpLstWidgets.add(_actor());
-    tmpLstWidgets.add(_actor());
-
-    return SizedBox(
-      height: 150,
-      child: ListView.builder(
-        shrinkWrap: true,
-        scrollDirection: Axis.horizontal,
-        itemCount: tmpLstWidgets.length,
-        itemBuilder: (BuildContext context, int index) => tmpLstWidgets[index],
-      ),
-    );
+          return SizedBox(
+            height: 150,
+            child: ListView.builder(
+                shrinkWrap: true,
+                scrollDirection: Axis.horizontal,
+                itemCount: snapshot.data.length,
+                itemBuilder: (BuildContext context, int index) =>
+                    _actor(snapshot.data[index])),
+          );
+        });
   }
 
-  Widget _actor() {
+  Widget _actor(Cast cast) {
     return Container(
       width: 120,
       padding: const EdgeInsets.only(right: 6),
       child: Column(
         children: [
           Image.network(
-            'https://www.themoviedb.org/t/p/w138_and_h175_face/mbMsmQE5CyMVTIGMGCw2XpcPCOc.jpg',
+            '${moviesProvider.imagePath}${cast.profilePath}',
             height: 120,
           ),
           Flexible(
             child: Text(
-              'nombre de la persona',
+              cast.name,
               textAlign: TextAlign.center,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
@@ -176,7 +180,7 @@ class DetailsPage extends StatelessWidget {
 
   _titulo() {
     return Container(
-      color: Colors.red,
+      // color: Colors.red,
       width: double.infinity,
       child: Text(
         '${movie.title} (${movie.releaseDate.year.toString().padLeft(4, '0')})',
@@ -204,7 +208,8 @@ class DetailsPage extends StatelessWidget {
     return Row(
       children: [
         Icon(Icons.star_border),
-        Text(movie.voteAverage.toString()),
+        Text(
+            '${movie.voteAverage.toString()} de un total de ${movie.voteCount} votos'),
       ],
     );
   }
