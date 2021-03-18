@@ -96,10 +96,50 @@ class DetailsPage extends StatelessWidget {
             'Elenco',
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
-          Text(
-            movie.overview,
-            textAlign: TextAlign.justify,
-            style: TextStyle(fontSize: 16),
+          _actoresListado(),
+        ],
+      ),
+    );
+  }
+
+  _actoresListado() {
+    List<Widget> tmpLstWidgets = [];
+
+    tmpLstWidgets.add(_actor());
+    tmpLstWidgets.add(_actor());
+    tmpLstWidgets.add(_actor());
+    tmpLstWidgets.add(_actor());
+    tmpLstWidgets.add(_actor());
+    tmpLstWidgets.add(_actor());
+
+    return SizedBox(
+      height: 150,
+      child: ListView.builder(
+        shrinkWrap: true,
+        scrollDirection: Axis.horizontal,
+        itemCount: tmpLstWidgets.length,
+        itemBuilder: (BuildContext context, int index) => tmpLstWidgets[index],
+      ),
+    );
+  }
+
+  Widget _actor() {
+    return Container(
+      width: 120,
+      padding: const EdgeInsets.only(right: 6),
+      child: Column(
+        children: [
+          Image.network(
+            'https://www.themoviedb.org/t/p/w138_and_h175_face/mbMsmQE5CyMVTIGMGCw2XpcPCOc.jpg',
+            height: 120,
+          ),
+          Flexible(
+            child: Text(
+              'nombre de la persona',
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
           ),
         ],
       ),
