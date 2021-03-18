@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
+
 import 'src/pages/home_page.dart';
+import 'src/pages/details_page.dart';
 
 void main() {
   runApp(MyApp());
@@ -19,6 +21,7 @@ class MyApp extends StatelessWidget {
       initialRoute: 'Home',
       routes: {
         'Home': (BuildContext context) => HomePage(),
+        'Details': (BuildContext context) => DetailsPage(),
         // 'Result': (BuildContext context) => ResultPage(),
         // 'Search': (BuildContext context) => SearchPage(),
       },

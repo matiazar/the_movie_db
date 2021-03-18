@@ -18,6 +18,7 @@ class _HomePageState extends State<HomePage> {
 
   final moviesProvider = new MoviesProvider();
   // moviesProvider.getPopulars();
+  List<Genre> genres;
 
   @override
   Widget build(BuildContext context) {
@@ -94,11 +95,29 @@ class _HomePageState extends State<HomePage> {
           style: Theme.of(context).textTheme.subtitle1,
         ),
         Expanded(
-            child: Center(
-          child: _listadoPeliculas(),
-        )),
+          child: Center(
+            child: _listadoPeliculas(),
+          ),
+        ),
+        _listadoGeneros(),
       ],
     );
+  }
+
+  _listadoGeneros() {
+    return FutureBuilder(
+        future: moviesProvider.getGenres(),
+        builder: (context, AsyncSnapshot<List<Genre>> snapshot) {
+          if (snapshot.hasError) {
+            return Center(child: Text("${snapshot.error}"));
+          } else if (!snapshot.hasData) {
+            return Container();
+          }
+
+          genres = snapshot.data;
+
+          return Container();
+        });
   }
 
   _listadoPeliculas() {
@@ -111,30 +130,33 @@ class _HomePageState extends State<HomePage> {
             return Center(child: CircularProgressIndicator());
           }
 
-          if (snapshot.data.length > 0)
+          if (snapshot.data.length > 0) {
             _posterPath = snapshot.data[0].posterPath;
 
-          // print(snapshot);
-          return Swiper(
-            // controller: PageController(viewportFraction: 0.8),
-            itemCount: snapshot.data.length,
-            itemBuilder: (context, index) =>
-                _verMovie(snapshot.data[index], context),
-            // itemCount: 3,
-            viewportFraction: 0.7,
-            scale: 0.6,
-            // pagination: new SwiperPagination(),
-            control: new SwiperControl(),
-            // layout: SwiperLayout.TINDER,
-            // itemHeight: MediaQuery.of(context).size.height * .6,
-            // itemWidth: MediaQuery.of(context).size.height * .7,
-            onIndexChanged: (index) {
-              // print(index);
-              setState(() {
-                _posterPath = snapshot.data[index].posterPath;
-              });
-            },
-          );
+            // print(snapshot);
+            return Swiper(
+              // controller: PageController(viewportFraction: 0.8),
+              itemCount: snapshot.data.length,
+              itemBuilder: (context, index) =>
+                  _verMovie(snapshot.data[index], context),
+              // itemCount: 3,
+              viewportFraction: 0.7,
+              scale: 0.6,
+              // pagination: new SwiperPagination(),
+              control: new SwiperControl(),
+              // layout: SwiperLayout.TINDER,
+              // itemHeight: MediaQuery.of(context).size.height * .6,
+              // itemWidth: MediaQuery.of(context).size.height * .7,
+              onIndexChanged: (index) {
+                // print(index);
+                setState(() {
+                  _posterPath = snapshot.data[index].posterPath;
+                });
+              },
+            );
+          }
+
+          return Container();
 
           // return PageView.builder(
           //   controller: PageController(viewportFraction: 0.8),
@@ -154,7 +176,9 @@ class _HomePageState extends State<HomePage> {
   _verMovie(Movie movie, context) {
     return GestureDetector(
       onTap: () {
-        print(movie);
+        Navigator.pushNamed(context, 'Details',
+            arguments: {'movie': movie, 'genres': genres});
+        // print(movie);
       },
       child: Center(
         child: Column(
