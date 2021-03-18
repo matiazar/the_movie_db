@@ -133,8 +133,10 @@ class DetailsPage extends StatelessWidget {
       padding: const EdgeInsets.only(right: 6),
       child: Column(
         children: [
-          Image.network(
-            '${moviesProvider.imagePath}${cast.profilePath}',
+          FadeInImage(
+            placeholder: AssetImage('assets/default_profile.png'),
+            image:
+                NetworkImage('${moviesProvider.imagePath}${cast.profilePath}'),
             height: 120,
           ),
           Flexible(
