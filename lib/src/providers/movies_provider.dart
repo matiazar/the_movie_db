@@ -62,8 +62,14 @@ class MoviesProvider {
       case 'Upcoming':
         path = 'movie/upcoming';
         break;
+      case 'Latest':
+        path = 'movie/latest';
+        break;
       case 'TopRated':
         path = 'movie/top_rated';
+        break;
+      case 'NowPlaying':
+        path = 'movie/now_playing';
         break;
       default:
         path = 'movie/popular';

@@ -36,16 +36,26 @@ class _HomePageState extends State<HomePage> {
                 icon: Icon(Icons.favorite),
                 onPressed: () {
                   _title = 'Populares';
-                  _tipoPeliculas = 'TopRated';
+                  _tipoPeliculas = 'Popular';
+                  // _tipoPeliculas = 'TopRated';
                   setState(() {});
                 }),
             Spacer(),
+            // IconButton(
+            //     tooltip: 'Ultimas',
+            //     icon: Icon(Icons.movie),
+            //     onPressed: () {
+            //       _title = 'Ultimas';
+            //       _tipoPeliculas = 'Latest';
+            //       setState(() {});
+            //     }),
+            // Spacer(),
             IconButton(
-                tooltip: 'Ultimas',
+                tooltip: 'En Cine',
                 icon: Icon(Icons.movie),
                 onPressed: () {
-                  _title = 'Ultimas';
-                  _tipoPeliculas = 'Latest';
+                  _title = 'En Cine';
+                  _tipoPeliculas = 'NowPlaying';
                   setState(() {});
                 }),
             Spacer(),
@@ -64,7 +74,6 @@ class _HomePageState extends State<HomePage> {
           child: Icon(Icons.search),
           onPressed: () {
             showSearch(
-              
               context: context,
               delegate: CustomSearchDelegate(),
             );
