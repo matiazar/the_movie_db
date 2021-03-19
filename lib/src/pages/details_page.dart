@@ -59,7 +59,7 @@ class DetailsPage extends StatelessWidget {
                 children: [
                   _titulo(),
                   SizedBox(height: 5),
-                  _generos(),
+                  // _generos(),
                   SizedBox(height: 5),
                   _promedio(),
                 ]),
@@ -129,16 +129,21 @@ class DetailsPage extends StatelessWidget {
 
   Widget _actor(Cast cast) {
     return Container(
-      width: 120,
+      width: 100,
       padding: const EdgeInsets.only(right: 6),
       child: Column(
         children: [
-          FadeInImage(
-            placeholder: AssetImage('assets/default_profile.png'),
-            image:
-                NetworkImage('${moviesProvider.imagePath}${cast.profilePath}'),
-            height: 120,
-          ),
+          (cast.profilePath != null)
+              ? FadeInImage(
+                  placeholder: AssetImage('assets/default_profile.png'),
+                  image: NetworkImage(
+                      '${moviesProvider.imagePath}${cast.profilePath}'),
+                  height: 120,
+                  width: 100,
+                  fit: BoxFit.fill,
+                )
+              : Image.asset('assets/default_profile.png',
+                  height: 120, width: 100, fit: BoxFit.cover),
           Flexible(
             child: Text(
               cast.name,

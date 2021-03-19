@@ -36,7 +36,7 @@ class Cast {
   String name;
   String originalName;
   double popularity;
-  dynamic profilePath;
+  String profilePath;
   int castId;
   String character;
   String creditId;

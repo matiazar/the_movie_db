@@ -14,6 +14,7 @@ class MoviesProvider {
 
   int _page = 1;
   Dio dio = new Dio(); // with default Options
+  Response _response;
 
   // 3/movie/popular?api_key=0e685fd77fb3d76874a3ac26e0db8a4b&language=es-AR&page=1
   MoviesProvider() {
@@ -32,10 +33,9 @@ class MoviesProvider {
     //movie/popular?api_key=0e685fd77fb3d76874a3ac26e0db8a4b&language=es-AR&page=1
 
     final path = 'genre/movie/list';
-    Response response;
 
     try {
-      response = await dio.get('$_url$path', queryParameters: {});
+      _response = await dio.get('$_url$path', queryParameters: {});
     } catch (e) {
       if (e.response != null) {
         print(e.response.data);
@@ -48,18 +48,31 @@ class MoviesProvider {
       }
     }
 
-    var genres = Genres.fromJson(response.data['genres']);
+    var genres = Genres.fromJson(_response.data['genres']);
     return genres.items;
   }
 
-  Future<List<Movie>> getPopulars() async {
+  Future<List<Movie>> getMovies(String type) async {
     //movie/popular?api_key=0e685fd77fb3d76874a3ac26e0db8a4b&language=es-AR&page=1
 
-    final path = 'movie/popular';
-    Response response;
+    var path;
+
+    switch (type) {
+      // case 'Populars': final path = 'movie/popular'; break;
+      case 'Upcoming':
+        path = 'movie/upcoming';
+        break;
+      case 'TopRated':
+        path = 'movie/top_rated';
+        break;
+      default:
+        path = 'movie/popular';
+        break;
+    }
+    // final path = 'movie/popular';
 
     try {
-      response = await dio.get('$_url$path', queryParameters: {});
+      _response = await dio.get('$_url$path', queryParameters: {});
     } catch (e) {
       if (e.response != null) {
         print(e.response.data);
@@ -72,38 +85,34 @@ class MoviesProvider {
       }
     }
 
-    var movies = Movies.fromJson(response.data['results']);
+    var movies = Movies.fromJson(_response.data['results']);
     return movies.items;
   }
 
-  Future<List<Movie>> getLatest() async {
-    //movie/latest?api_key=<<api_key>>&language=en-US
-
-    final path = 'movie/latest';
-    Response response;
-
-    try {
-      response = await dio.get('$_url$path', queryParameters: {});
-    } catch (e) {
-      if (e.response != null) {
-        print(e.response.data);
-        print(e.response.headers);
-        print(e.response.request);
-      } else {
-        // Something happened in setting up or sending the request that triggered an Error
-        print(e.request);
-        print(e.message);
-      }
-    }
-
-    var movies = Movies.fromJson(response.data['results']);
-    return movies.items;
-  }
-
-  Future<List<Movie>> search() {
+  Future<List<Movie>> search(String query) async {
     //search/movie?api_key=<<api_key>>&language=en-US&page=1&include_adult=false
-    List<Movie> a = [];
-    return Future.value(a);
+
+    if (query == null || query == '') return [];
+
+    final path = 'search/movie';
+
+    try {
+      _response =
+          await dio.get('$_url$path', queryParameters: {'query': query});
+    } catch (e) {
+      if (e.response != null) {
+        print(e.response.data);
+        print(e.response.headers);
+        print(e.response.request);
+      } else {
+        // Something happened in setting up or sending the request that triggered an Error
+        print(e.request);
+        print(e.message);
+      }
+    }
+
+    var movies = Movies.fromJson(_response.data['results']);
+    return movies.items;
   }
 
   Future<Movie> get() {
@@ -114,10 +123,9 @@ class MoviesProvider {
 
   Future<List<Movie>> getSimilar(Movie movie) async {
     final path = 'movie/${movie.id}/similar';
-    Response response;
 
     try {
-      response = await dio.get('$_url$path', queryParameters: {});
+      _response = await dio.get('$_url$path', queryParameters: {});
     } catch (e) {
       if (e.response != null) {
         print(e.response.data);
@@ -130,18 +138,15 @@ class MoviesProvider {
       }
     }
 
-    var movies = Movies.fromJson(response.data['results']);
+    var movies = Movies.fromJson(_response.data['results']);
     return movies.items;
   }
 
-
   Future<List<Cast>> getCast(Movie movie) async {
-    
     final path = 'movie/${movie.id}/credits';
-    Response response;
 
     try {
-      response = await dio.get('$_url$path', queryParameters: {});
+      _response = await dio.get('$_url$path', queryParameters: {});
     } catch (e) {
       if (e.response != null) {
         print(e.response.data);
@@ -154,8 +159,7 @@ class MoviesProvider {
       }
     }
 
-    var casts = Casts.fromJson(response.data['cast']);
+    var casts = Casts.fromJson(_response.data['cast']);
     return casts.items;
   }
-
 }

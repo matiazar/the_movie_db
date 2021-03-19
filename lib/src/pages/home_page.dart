@@ -5,6 +5,7 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 
 import 'package:the_movie_db/src/models/movies_model.dart';
 import 'package:the_movie_db/src/providers/movies_provider.dart';
+import 'package:the_movie_db/src/search/search_delegate.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key key}) : super(key: key);
@@ -15,6 +16,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   String _posterPath;
+  String _tipoPeliculas = 'Popular'; //Popular // Latest
+  String _title = 'Populares';
 
   final moviesProvider = new MoviesProvider();
   // moviesProvider.getPopulars();
@@ -30,19 +33,43 @@ class _HomePageState extends State<HomePage> {
           children: [
             IconButton(
                 tooltip: 'Populares',
-                icon: Icon(Icons.star_border_outlined),
-                onPressed: () {}),
+                icon: Icon(Icons.favorite),
+                onPressed: () {
+                  _title = 'Populares';
+                  _tipoPeliculas = 'TopRated';
+                  setState(() {});
+                }),
             Spacer(),
             IconButton(
                 tooltip: 'Ultimas',
-                icon: Icon(Icons.movie_creation_outlined),
-                onPressed: () {}),
+                icon: Icon(Icons.movie),
+                onPressed: () {
+                  _title = 'Ultimas';
+                  _tipoPeliculas = 'Latest';
+                  setState(() {});
+                }),
+            Spacer(),
+            IconButton(
+                tooltip: 'Próximamente',
+                icon: Icon(Icons.calendar_today),
+                onPressed: () {
+                  _title = 'Próximos Estrenos';
+                  _tipoPeliculas = 'Upcoming';
+                  setState(() {});
+                }),
           ],
         ),
       ),
-      floatingActionButton:
-          FloatingActionButton(child: Icon(Icons.search), onPressed: () {}),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.search),
+          onPressed: () {
+            showSearch(
+              
+              context: context,
+              delegate: CustomSearchDelegate(),
+            );
+          }),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: ColorfulSafeArea(
         // overflowRules: OverflowRules.all(true),
         color: Colors.white.withOpacity(0.7),
@@ -58,8 +85,7 @@ class _HomePageState extends State<HomePage> {
         // color: Colors.black,
         image: (_posterPath != null && _posterPath != 'null')
             ? DecorationImage(
-                image: NetworkImage(
-                    'https://image.tmdb.org/t/p/w500/$_posterPath'),
+                image: NetworkImage('${moviesProvider.imagePath}$_posterPath'),
                 fit: BoxFit.cover)
             : null,
       ),
@@ -72,7 +98,7 @@ class _HomePageState extends State<HomePage> {
           filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
           child: Container(
             alignment: Alignment.center,
-            color: Colors.black.withOpacity(0.5),
+            color: Colors.black.withOpacity(0.4),
             child: _estructuraHome(context),
           ),
         ),
@@ -82,17 +108,21 @@ class _HomePageState extends State<HomePage> {
 
   _estructuraHome(context) {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10.0),
+        Container(
+          padding: const EdgeInsets.symmetric(vertical: 20.0),
           child: Text(
             'The Movie DB',
-            style: Theme.of(context).textTheme.headline5,
+            style: Theme.of(context).textTheme.headline3,
           ),
         ),
-        Text(
-          'Populares',
-          style: Theme.of(context).textTheme.subtitle1,
+        Container(
+          padding: const EdgeInsets.only(bottom: 10.0),
+          child: Text(
+            _title,
+            style: Theme.of(context).textTheme.subtitle1,
+          ),
         ),
         Expanded(
           child: Center(
@@ -122,7 +152,7 @@ class _HomePageState extends State<HomePage> {
 
   _listadoPeliculas() {
     return FutureBuilder(
-        future: moviesProvider.getPopulars(),
+        future: moviesProvider.getMovies(_tipoPeliculas),
         builder: (context, AsyncSnapshot<List<Movie>> snapshot) {
           if (snapshot.hasError) {
             return Center(child: Text("${snapshot.error}"));
@@ -132,7 +162,6 @@ class _HomePageState extends State<HomePage> {
 
           if (snapshot.data.length > 0) {
             _posterPath = snapshot.data[0].posterPath;
-
             // print(snapshot);
             return Swiper(
               // controller: PageController(viewportFraction: 0.8),
