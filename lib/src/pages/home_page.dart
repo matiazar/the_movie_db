@@ -2,10 +2,12 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:colorful_safe_area/colorful_safe_area.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:the_movie_db/src/bloc/movies_bloc.dart';
 
 import 'package:the_movie_db/src/models/movies_model.dart';
 import 'package:the_movie_db/src/providers/movies_provider.dart';
 import 'package:the_movie_db/src/search/search_delegate.dart';
+import 'package:the_movie_db/src/widgets/background.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key key}) : super(key: key);
@@ -15,13 +17,21 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  // String _posterPath;
+
   String _posterPath;
+
   String _tipoPeliculas = 'Popular'; //Popular // Latest
   String _title = 'Populares';
 
   final moviesProvider = new MoviesProvider();
   // moviesProvider.getPopulars();
   List<Genre> genres;
+
+  // final GlobalKey<BackgroundWidgetState> backWidget =
+  //     GlobalKey<BackgroundWidgetState>();
+
+  final moviesBloc = new MoviesBloc();
 
   @override
   Widget build(BuildContext context) {
@@ -89,29 +99,15 @@ class _HomePageState extends State<HomePage> {
   }
 
   _backgroundApp(context) {
-    return Container(
-      decoration: BoxDecoration(
-        // color: Colors.black,
-        image: (_posterPath != null && _posterPath != 'null')
-            ? DecorationImage(
-                image: NetworkImage('${moviesProvider.imagePath}$_posterPath'),
-                fit: BoxFit.cover)
-            : null,
-      ),
-      width: double.infinity,
-      height: double.infinity,
-      // color: Colors.red,
-      child: ClipRRect(
-        // make sure we apply clip it properly
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-          child: Container(
-            alignment: Alignment.center,
-            color: Colors.black.withOpacity(0.4),
-            child: _estructuraHome(context),
-          ),
+    return Stack(
+      children: [
+        BackgroundWidget(
+          // key: Key('backWidget'),
+          imageUrl: moviesProvider.imagePath,
+          // image: _posterPath,
         ),
-      ),
+        _estructuraHome(context),
+      ],
     );
   }
 
@@ -170,7 +166,9 @@ class _HomePageState extends State<HomePage> {
           }
 
           if (snapshot.data.length > 0) {
-            _posterPath = snapshot.data[0].posterPath;
+
+            moviesBloc.changeMovie(snapshot.data[0]);
+          
             // print(snapshot);
             return Swiper(
               // controller: PageController(viewportFraction: 0.8),
@@ -187,9 +185,20 @@ class _HomePageState extends State<HomePage> {
               // itemWidth: MediaQuery.of(context).size.height * .7,
               onIndexChanged: (index) {
                 // print(index);
-                setState(() {
-                  _posterPath = snapshot.data[index].posterPath;
-                });
+
+                moviesBloc.changeMovie(snapshot.data[index]);
+
+                // _posterPath = snapshot.data[index].posterPath;
+
+                // BackgroundWidget().refresh();
+
+                // if (backWidget.currentState != null)
+                //   backWidget.currentState.setState(() {
+                //     _posterPath = snapshot.data[index].posterPath;
+                //   });
+                // setState(() {
+                // _posterPath = snapshot.data[index].posterPath;
+                // });
               },
             );
           }
