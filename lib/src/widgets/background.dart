@@ -6,7 +6,7 @@ import 'package:the_movie_db/src/bloc/movies_bloc.dart';
 import 'package:the_movie_db/src/models/movies_model.dart';
 
 class BackgroundWidget extends StatefulWidget {
-  String imageUrl;
+  final String imageUrl;
   // BackgroundWidget({Key key, this.imageUrl, this.image}) : super(key: key);
   BackgroundWidget({Key key, this.imageUrl}) : super(key: key);
 

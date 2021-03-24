@@ -19,7 +19,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   // String _posterPath;
 
-  String _posterPath;
+  // String _posterPath;
 
   String _tipoPeliculas = 'Popular'; //Popular // Latest
   String _title = 'Populares';

@@ -56,7 +56,7 @@ class Movie {
         overview: json["overview"],
         popularity: json["popularity"].toDouble(),
         posterPath: json["poster_path"],
-        releaseDate: (json["release_date"] == '')
+        releaseDate: (json["release_date"] == '' || json["release_date"] == null)
             ? null
             : DateTime.parse(json["release_date"]),
         title: json["title"],

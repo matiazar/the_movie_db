@@ -6,12 +6,20 @@ import 'package:the_movie_db/src/providers/movies_provider.dart';
 import 'package:the_movie_db/src/widgets/video_player.dart';
 
 class DetailsPage extends StatelessWidget {
-  // const DetailsPage({Key key}) : super(key: key);
+  // DetailsPage({Key key}) : super(key: key);
 
   final moviesProvider = new MoviesProvider();
 
-  Movie movie = new Movie();
+  Movie movie;
   List<Genre> genres;
+
+  // DetailsPage({this.movie, this.genres});
+
+  // DetailsPage({
+  //   Key key,
+  //   @required this.movie,
+  //   @required this.genres,
+  // }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +27,9 @@ class DetailsPage extends StatelessWidget {
 
     movie = args['movie'];
     genres = args['genres'];
+
+    // final Movie movie = args['movie'];
+    // final List<Genre> genres = args['genres'];
 
     return Scaffold(
       floatingActionButton: FloatingActionButton(
