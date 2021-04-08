@@ -7,10 +7,6 @@ import 'src/pages/details_page.dart';
 import 'src/providers/movies_provider.dart';
 
 void main() async {
-
-  // final moviesProvider = new MoviesProvider();
-  // List<Genre> genres = await moviesProvider.getGenres();
-
   runApp(MyApp());
 }
 
@@ -20,7 +16,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [ChangeNotifierProvider<Movie>(create: (context) => Movie())],
+      providers: [
+        FutureProvider<Movie>(
+            create: (context) => Future.value(), initialData: Movie())
+      ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'The Movie DB',

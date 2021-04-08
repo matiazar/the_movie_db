@@ -110,7 +110,7 @@ class _HomePageState extends State<HomePage> {
     return Stack(
       children: [
         BackgroundWidget(
-          imageUrl: moviesProvider.imagePath,
+          // imageUrl: moviesProvider.imagePath,
         ),
         _estructuraHome(context),
       ],
@@ -173,7 +173,7 @@ class _HomePageState extends State<HomePage> {
 
           if (snapshot.data.length > 0) {
             // moviesBloc.changeMovie(snapshot.data[0]);
-            // selectedMovie.selected = snapshot.data[0];`
+            selectedMovie.selected = snapshot.data[0];
             // selectedMovie.selected = context.read<Movie>();
 
             // print(snapshot);
