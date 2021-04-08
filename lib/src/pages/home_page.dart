@@ -107,6 +107,12 @@ class _HomePageState extends State<HomePage> {
   }
 
   _backgroundApp(context) {
+
+    final String imageUrl = moviesProvider.imagePath;
+
+    // if (selectedMovie == null) return Container();
+
+
     return Stack(
       children: [
         BackgroundWidget(
