@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:the_movie_db/src/models/movies_model.dart';
 
 import 'src/pages/home_page.dart';
 import 'src/pages/details_page.dart';
@@ -12,37 +14,40 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'The Movie DB',
-      initialRoute: 'Home',
-      routes: {
-        'Home': (BuildContext context) => HomePage(),
-        'Details': (BuildContext context) => DetailsPage(),
-        // 'Result': (BuildContext context) => ResultPage(),
-        // 'Search': (BuildContext context) => SearchPage(),
-      },
-      theme: ThemeData(
-          primarySwatch: Colors.blue,
-          textTheme: TextTheme(
-            headline3: TextStyle(
-              color: Colors.white,
-            ),
-            headline5: TextStyle(
-              fontSize: 22.0,
-              color: Colors.white,
-            ),
-            subtitle1: TextStyle(
-              fontSize: 24.0,
-              color: Colors.white,
-              fontFamily: 'Calibri',
-            ),
-            subtitle2: TextStyle(
-              fontSize: 18.0,
-              color: Colors.white,
-              fontFamily: 'Calibri',
-            ),
-          )),
+    return MultiProvider(
+      providers: [ChangeNotifierProvider<Movie>(create: (context) => Movie())],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'The Movie DB',
+        initialRoute: 'Home',
+        routes: {
+          'Home': (BuildContext context) => HomePage(),
+          'Details': (BuildContext context) => DetailsPage(),
+          // 'Result': (BuildContext context) => ResultPage(),
+          // 'Search': (BuildContext context) => SearchPage(),
+        },
+        theme: ThemeData(
+            primarySwatch: Colors.blue,
+            textTheme: TextTheme(
+              headline3: TextStyle(
+                color: Colors.white,
+              ),
+              headline5: TextStyle(
+                fontSize: 22.0,
+                color: Colors.white,
+              ),
+              subtitle1: TextStyle(
+                fontSize: 24.0,
+                color: Colors.white,
+                fontFamily: 'Calibri',
+              ),
+              subtitle2: TextStyle(
+                fontSize: 18.0,
+                color: Colors.white,
+                fontFamily: 'Calibri',
+              ),
+            )),
+      ),
     );
   }
 }

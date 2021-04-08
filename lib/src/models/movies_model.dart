@@ -1,3 +1,17 @@
+import 'package:flutter/cupertino.dart';
+
+/*
+class MovieSelected extends ChangeNotifier {
+  Movie _movie = new Movie();
+
+  Movie get movie => _movie;
+
+  set movie(Movie movie) {
+    _movie = movie;
+    notifyListeners();
+  }
+}
+*/
 class Movies {
   List<Movie> items = [];
 
@@ -13,7 +27,16 @@ class Movies {
   }
 }
 
-class Movie {
+class Movie extends ChangeNotifier {
+  Movie _selected = null;
+
+  Movie get selected => _selected;
+
+  set selected(Movie movie) {
+    _selected = movie;
+    notifyListeners();
+  }
+
   Movie({
     this.adult,
     this.backdropPath,
@@ -56,9 +79,10 @@ class Movie {
         overview: json["overview"],
         popularity: json["popularity"].toDouble(),
         posterPath: json["poster_path"],
-        releaseDate: (json["release_date"] == '' || json["release_date"] == null)
-            ? null
-            : DateTime.parse(json["release_date"]),
+        releaseDate:
+            (json["release_date"] == '' || json["release_date"] == null)
+                ? null
+                : DateTime.parse(json["release_date"]),
         title: json["title"],
         video: json["video"],
         voteAverage: json["vote_average"].toDouble(),

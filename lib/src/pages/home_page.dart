@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:colorful_safe_area/colorful_safe_area.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:provider/provider.dart';
 import 'package:the_movie_db/src/bloc/movies_bloc.dart';
 
 import 'package:the_movie_db/src/models/movies_model.dart';
@@ -31,10 +32,14 @@ class _HomePageState extends State<HomePage> {
   // final GlobalKey<BackgroundWidgetState> backWidget =
   //     GlobalKey<BackgroundWidgetState>();
 
-  final moviesBloc = new MoviesBloc();
+  // final moviesBloc = new MoviesBloc();
+
+  Movie selectedMovie;
 
   @override
   Widget build(BuildContext context) {
+    selectedMovie = Provider.of<Movie>(context, listen: false);
+
     return Scaffold(
       bottomNavigationBar: BottomAppBar(
         elevation: 0,
@@ -45,10 +50,10 @@ class _HomePageState extends State<HomePage> {
                 tooltip: 'Populares',
                 icon: Icon(Icons.favorite),
                 onPressed: () {
-                  _title = 'Populares';
-                  _tipoPeliculas = 'Popular';
-                  // _tipoPeliculas = 'TopRated';
-                  setState(() {});
+                  setState(() {
+                    _title = 'Populares';
+                    _tipoPeliculas = 'Popular';
+                  });
                 }),
             Spacer(),
             // IconButton(
@@ -64,18 +69,20 @@ class _HomePageState extends State<HomePage> {
                 tooltip: 'En Cine',
                 icon: Icon(Icons.movie),
                 onPressed: () {
-                  _title = 'En Cine';
-                  _tipoPeliculas = 'NowPlaying';
-                  setState(() {});
+                  setState(() {
+                    _title = 'En Cine';
+                    _tipoPeliculas = 'NowPlaying';
+                  });
                 }),
             Spacer(),
             IconButton(
                 tooltip: 'Próximamente',
                 icon: Icon(Icons.calendar_today),
                 onPressed: () {
-                  _title = 'Próximos Estrenos';
-                  _tipoPeliculas = 'Upcoming';
-                  setState(() {});
+                  setState(() {
+                    _title = 'Próximos Estrenos';
+                    _tipoPeliculas = 'Upcoming';
+                  });
                 }),
           ],
         ),
@@ -102,9 +109,7 @@ class _HomePageState extends State<HomePage> {
     return Stack(
       children: [
         BackgroundWidget(
-          // key: Key('backWidget'),
           imageUrl: moviesProvider.imagePath,
-          // image: _posterPath,
         ),
         _estructuraHome(context),
       ],
@@ -116,7 +121,7 @@ class _HomePageState extends State<HomePage> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Container(
-          padding: const EdgeInsets.symmetric(vertical: 20.0),
+          padding: const EdgeInsets.symmetric(vertical: 15.0),
           child: Text(
             'The Movie DB',
             style: Theme.of(context).textTheme.headline3,
@@ -166,9 +171,9 @@ class _HomePageState extends State<HomePage> {
           }
 
           if (snapshot.data.length > 0) {
+            // moviesBloc.changeMovie(snapshot.data[0]);
+            // selectedMovie.selected = snapshot.data[0];
 
-            moviesBloc.changeMovie(snapshot.data[0]);
-          
             // print(snapshot);
             return Swiper(
               // controller: PageController(viewportFraction: 0.8),
@@ -186,7 +191,8 @@ class _HomePageState extends State<HomePage> {
               onIndexChanged: (index) {
                 // print(index);
 
-                moviesBloc.changeMovie(snapshot.data[index]);
+                // moviesBloc.changeMovie(snapshot.data[index]);
+                selectedMovie.selected = snapshot.data[index];
 
                 // _posterPath = snapshot.data[index].posterPath;
 
