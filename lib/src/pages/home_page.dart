@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:colorful_safe_area/colorful_safe_area.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:provider/provider.dart';
-import 'package:the_movie_db/src/bloc/movies_bloc.dart';
+// import 'package:the_movie_db/src/bloc/movies_bloc.dart';
 
 import 'package:the_movie_db/src/models/movies_model.dart';
 import 'package:the_movie_db/src/providers/movies_provider.dart';
@@ -172,7 +172,8 @@ class _HomePageState extends State<HomePage> {
 
           if (snapshot.data.length > 0) {
             // moviesBloc.changeMovie(snapshot.data[0]);
-            // selectedMovie.selected = snapshot.data[0];
+            // selectedMovie.selected = snapshot.data[0];`
+            selectedMovie.selected = context.read<Movie>();
 
             // print(snapshot);
             return Swiper(

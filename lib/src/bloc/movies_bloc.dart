@@ -9,7 +9,7 @@ class MoviesBloc {
     return _singleton;
   }
 
-  MoviesBloc._() {}
+  MoviesBloc._();
 
   final _moviesController = StreamController<Movie>.broadcast();
 

@@ -28,7 +28,7 @@ class Movies {
 }
 
 class Movie extends ChangeNotifier {
-  Movie _selected = null;
+  Movie _selected;
 
   Movie get selected => _selected;
 
