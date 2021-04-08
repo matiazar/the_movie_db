@@ -4,8 +4,13 @@ import 'package:the_movie_db/src/models/movies_model.dart';
 
 import 'src/pages/home_page.dart';
 import 'src/pages/details_page.dart';
+import 'src/providers/movies_provider.dart';
 
-void main() {
+void main() async {
+
+  // final moviesProvider = new MoviesProvider();
+  // List<Genre> genres = await moviesProvider.getGenres();
+
   runApp(MyApp());
 }
 

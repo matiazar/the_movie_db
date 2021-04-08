@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:colorful_safe_area/colorful_safe_area.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:provider/provider.dart';
-// import 'package:the_movie_db/src/bloc/movies_bloc.dart';
 
 import 'package:the_movie_db/src/models/movies_model.dart';
 import 'package:the_movie_db/src/providers/movies_provider.dart';
 import 'package:the_movie_db/src/search/search_delegate.dart';
+import 'package:the_movie_db/src/services/genres_service.dart';
 import 'package:the_movie_db/src/widgets/background.dart';
 
 class HomePage extends StatefulWidget {
@@ -18,27 +18,28 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  // String _posterPath;
-
-  // String _posterPath;
 
   String _tipoPeliculas = 'Popular'; //Popular // Latest
   String _title = 'Populares';
 
   final moviesProvider = new MoviesProvider();
-  // moviesProvider.getPopulars();
+
+  final genresService = new GenresService();
   List<Genre> genres;
-
-  // final GlobalKey<BackgroundWidgetState> backWidget =
-  //     GlobalKey<BackgroundWidgetState>();
-
-  // final moviesBloc = new MoviesBloc();
 
   Movie selectedMovie;
 
   @override
+  void initState() {
+    genres = genresService.items;
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     selectedMovie = Provider.of<Movie>(context, listen: false);
+
+    // genres = genresService.items;
 
     return Scaffold(
       bottomNavigationBar: BottomAppBar(
@@ -139,26 +140,26 @@ class _HomePageState extends State<HomePage> {
             child: _listadoPeliculas(),
           ),
         ),
-        _listadoGeneros(),
+        // _listadoGeneros(),
       ],
     );
   }
 
-  _listadoGeneros() {
-    return FutureBuilder(
-        future: moviesProvider.getGenres(),
-        builder: (context, AsyncSnapshot<List<Genre>> snapshot) {
-          if (snapshot.hasError) {
-            return Center(child: Text("${snapshot.error}"));
-          } else if (!snapshot.hasData) {
-            return Container();
-          }
+  // _listadoGeneros() {
+  //   return FutureBuilder(
+  //       future: moviesProvider.getGenres(),
+  //       builder: (context, AsyncSnapshot<List<Genre>> snapshot) {
+  //         if (snapshot.hasError) {
+  //           return Center(child: Text("${snapshot.error}"));
+  //         } else if (!snapshot.hasData) {
+  //           return Container();
+  //         }
 
-          genres = snapshot.data;
+  //         genres = snapshot.data;
 
-          return Container();
-        });
-  }
+  //         return Container();
+  //       });
+  // }
 
   _listadoPeliculas() {
     return FutureBuilder(
@@ -173,7 +174,7 @@ class _HomePageState extends State<HomePage> {
           if (snapshot.data.length > 0) {
             // moviesBloc.changeMovie(snapshot.data[0]);
             // selectedMovie.selected = snapshot.data[0];`
-            selectedMovie.selected = context.read<Movie>();
+            // selectedMovie.selected = context.read<Movie>();
 
             // print(snapshot);
             return Swiper(
@@ -231,7 +232,8 @@ class _HomePageState extends State<HomePage> {
     return GestureDetector(
       onTap: () {
         Navigator.pushNamed(context, 'Details',
-            arguments: {'movie': movie, 'genres': genres});
+            // arguments: {'movie': movie, 'genres': genres});
+            arguments: {'movie': movie});
         // print(movie);
       },
       child: Center(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 // import 'package:the_movie_db/src/models/movies_model.dart';
 import 'package:the_movie_db/src/providers/movies_provider.dart';
+import 'package:the_movie_db/src/services/genres_service.dart';
 
 import 'package:the_movie_db/src/widgets/video_player.dart';
 
@@ -11,22 +12,16 @@ class DetailsPage extends StatelessWidget {
   final moviesProvider = new MoviesProvider();
 
   Movie movie;
-  List<Genre> genres;
-
-  // DetailsPage({this.movie, this.genres});
-
-  // DetailsPage({
-  //   Key key,
-  //   @required this.movie,
-  //   @required this.genres,
-  // }) : super(key: key);
-
+  
+  final genresService = new GenresService();
+  
   @override
   Widget build(BuildContext context) {
     final Map<String, dynamic> args = ModalRoute.of(context).settings.arguments;
 
     movie = args['movie'];
-    genres = args['genres'];
+    // genres = args['genres'];
+    // genres = genresService.items;
 
     // final Movie movie = args['movie'];
     // final List<Genre> genres = args['genres'];
@@ -211,7 +206,8 @@ class DetailsPage extends StatelessWidget {
   _generos() {
     List tmpStrings = [];
     movie.genreIds.forEach((genreId) {
-      Genre genre = genres.firstWhere((element) => element.id == genreId);
+      Genre genre =
+          genresService.items.firstWhere((element) => element.id == genreId);
 
       tmpStrings.add(genre.name);
     });
