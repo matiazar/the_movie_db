@@ -70,7 +70,7 @@ class DetailsPage extends StatelessWidget {
                 children: [
                   _titulo(),
                   SizedBox(height: 5),
-                  // _generos(),
+                  _generos(),
                   SizedBox(height: 5),
                   _promedio(),
                 ]),
