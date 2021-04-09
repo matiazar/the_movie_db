@@ -12,9 +12,9 @@ class DetailsPage extends StatelessWidget {
   final moviesProvider = new MoviesProvider();
 
   Movie movie;
-  
+
   final genresService = new GenresService();
-  
+
   @override
   Widget build(BuildContext context) {
     final Map<String, dynamic> args = ModalRoute.of(context).settings.arguments;

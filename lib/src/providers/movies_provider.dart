@@ -2,10 +2,12 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:the_movie_db/src/models/casts_model.dart';
+import 'package:the_movie_db/src/models/genres_model.dart';
 import 'package:the_movie_db/src/models/movies_model.dart';
 
 export 'package:the_movie_db/src/models/casts_model.dart';
 export 'package:the_movie_db/src/models/movies_model.dart';
+export 'package:the_movie_db/src/models/genres_model.dart';
 
 class MoviesProvider extends ChangeNotifier {
   final _url = 'https://api.themoviedb.org/3/';

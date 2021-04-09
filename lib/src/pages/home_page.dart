@@ -22,9 +22,6 @@ class HomePage extends StatelessWidget {
 
   // final moviesProvider = new MoviesProvider();
 
-  final genresService = new GenresService();
-  List<Genre> genres;
-
   SwiperController swiperController = new SwiperController();
 
   @override
@@ -32,7 +29,8 @@ class HomePage extends StatelessWidget {
     print('build');
     // movieSelected = Provider.of<MovieSelected>(context); //, listen: false);
 
-    genres = genresService.items;
+    final genresService = new GenresService();
+    List<Genre> genres = genresService.items;
 
     return Scaffold(
       bottomNavigationBar: _navigationBar(context),

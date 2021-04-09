@@ -1,4 +1,3 @@
-import 'package:the_movie_db/src/models/movies_model.dart';
 import 'package:the_movie_db/src/providers/movies_provider.dart';
 
 class GenresService {
