@@ -11,14 +11,17 @@ import 'package:the_movie_db/src/search/search_delegate.dart';
 import 'package:the_movie_db/src/services/genres_service.dart';
 import 'package:the_movie_db/src/widgets/background.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({Key key}) : super(key: key);
+// class HomePage extends StatefulWidget {
+//   const HomePage({Key key}) : super(key: key);
 
-  @override
-  _HomePageState createState() => _HomePageState();
-}
+//   @override
+//   _HomePageState createState() => _HomePageState();
+// }
 
-class _HomePageState extends State<HomePage> {
+// class _HomePageState extends State<HomePage> {
+//
+class HomePage extends StatelessWidget {
+  //
   String _tipoPeliculas = 'Popular'; //Popular // Latest
   String _title = 'Populares';
 
@@ -28,23 +31,22 @@ class _HomePageState extends State<HomePage> {
   List<Genre> genres;
 
   MovieSelected movieSelected;
-
-  @override
-  void initState() {
-    print('init');
-    genres = genresService.items;
-    super.initState();
-  }
+  // @override
+  // void initState() {
+  //   print('init');
+  //   genres = genresService.items;
+  //   super.initState();
+  // }
 
   @override
   Widget build(BuildContext context) {
     print('build');
     movieSelected = Provider.of<MovieSelected>(context); //, listen: false);
 
-    // genres = genresService.items;
+    genres = genresService.items;
 
     return Scaffold(
-      bottomNavigationBar: _NavigationBar(),
+      bottomNavigationBar: _navigationBar(context),
 
       // BottomAppBar(
       //   elevation: 0,
@@ -110,7 +112,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  _NavigationBar() {
+  BottomNavigationBar _navigationBar(context) {
     final navigationModel = Provider.of<NavigationModel>(context);
 
     return BottomNavigationBar(
