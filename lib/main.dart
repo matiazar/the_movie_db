@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:the_movie_db/src/models/movies_model.dart';
+import 'package:the_movie_db/src/models/navigation_model.dart';
 
 import 'src/pages/home_page.dart';
 import 'src/pages/details_page.dart';
@@ -17,7 +18,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => MovieSelected())
+        ChangeNotifierProvider(create: (context) => MovieSelected()),
+        ChangeNotifierProvider(create: (context) => NavigationModel()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

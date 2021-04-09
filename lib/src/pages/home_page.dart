@@ -5,6 +5,7 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:provider/provider.dart';
 
 import 'package:the_movie_db/src/models/movies_model.dart';
+import 'package:the_movie_db/src/models/navigation_model.dart';
 import 'package:the_movie_db/src/providers/movies_provider.dart';
 import 'package:the_movie_db/src/search/search_delegate.dart';
 import 'package:the_movie_db/src/services/genres_service.dart';
@@ -18,7 +19,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   String _tipoPeliculas = 'Popular'; //Popular // Latest
   String _title = 'Populares';
 
@@ -31,7 +31,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-
     print('init');
     genres = genresService.items;
     super.initState();
@@ -39,59 +38,60 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-
     print('build');
-    movieSelected = Provider.of<MovieSelected>(context);//, listen: false);
+    movieSelected = Provider.of<MovieSelected>(context); //, listen: false);
 
     // genres = genresService.items;
 
     return Scaffold(
-      bottomNavigationBar: BottomAppBar(
-        elevation: 0,
-        color: Colors.transparent,
-        child: Row(
-          children: [
-            IconButton(
-                tooltip: 'Populares',
-                icon: Icon(Icons.favorite),
-                onPressed: () {
-                  setState(() {
-                    _title = 'Populares';
-                    _tipoPeliculas = 'Popular';
-                  });
-                }),
-            Spacer(),
-            // IconButton(
-            //     tooltip: 'Ultimas',
-            //     icon: Icon(Icons.movie),
-            //     onPressed: () {
-            //       _title = 'Ultimas';
-            //       _tipoPeliculas = 'Latest';
-            //       setState(() {});
-            //     }),
-            // Spacer(),
-            IconButton(
-                tooltip: 'En Cine',
-                icon: Icon(Icons.movie),
-                onPressed: () {
-                  setState(() {
-                    _title = 'En Cine';
-                    _tipoPeliculas = 'NowPlaying';
-                  });
-                }),
-            Spacer(),
-            IconButton(
-                tooltip: 'Próximamente',
-                icon: Icon(Icons.calendar_today),
-                onPressed: () {
-                  setState(() {
-                    _title = 'Próximos Estrenos';
-                    _tipoPeliculas = 'Upcoming';
-                  });
-                }),
-          ],
-        ),
-      ),
+      bottomNavigationBar: _NavigationBar(),
+
+      // BottomAppBar(
+      //   elevation: 0,
+      //   color: Colors.transparent,
+      //   child: Row(
+      //     children: [
+      //       IconButton(
+      //           tooltip: 'Populares',
+      //           icon: Icon(Icons.favorite),
+      //           onPressed: () {
+      //             setState(() {
+      //               _title = 'Populares';
+      //               _tipoPeliculas = 'Popular';
+      //             });
+      //           }),
+      //       Spacer(),
+      //       // IconButton(
+      //       //     tooltip: 'Ultimas',
+      //       //     icon: Icon(Icons.movie),
+      //       //     onPressed: () {
+      //       //       _title = 'Ultimas';
+      //       //       _tipoPeliculas = 'Latest';
+      //       //       setState(() {});
+      //       //     }),
+      //       // Spacer(),
+      //       IconButton(
+      //           tooltip: 'En Cine',
+      //           icon: Icon(Icons.movie),
+      //           onPressed: () {
+      //             setState(() {
+      //               _title = 'En Cine';
+      //               _tipoPeliculas = 'NowPlaying';
+      //             });
+      //           }),
+      //       Spacer(),
+      //       IconButton(
+      //           tooltip: 'Próximamente',
+      //           icon: Icon(Icons.calendar_today),
+      //           onPressed: () {
+      //             setState(() {
+      //               _title = 'Próximos Estrenos';
+      //               _tipoPeliculas = 'Upcoming';
+      //             });
+      //           }),
+      //     ],
+      //   ),
+      // ),
       floatingActionButton: FloatingActionButton(
           child: Icon(Icons.search),
           onPressed: () {
@@ -110,20 +110,51 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  _NavigationBar() {
+    final navigationModel = Provider.of<NavigationModel>(context);
+
+    return BottomNavigationBar(
+      currentIndex: navigationModel.index,
+      onTap: (index) {
+        // print(index);
+        navigationModel.index = index;
+
+        switch (index) {
+          case 1:
+            _title = 'En Cine';
+            _tipoPeliculas = 'NowPlaying';
+            break;
+
+          case 2:
+            _title = 'Próximos Estrenos';
+            _tipoPeliculas = 'Upcoming';
+            break;
+          default:
+            _title = 'Populares';
+            _tipoPeliculas = 'Popular';
+            break;
+          // default:
+        }
+      },
+      items: [
+        BottomNavigationBarItem(label: 'Populares', icon: Icon(Icons.favorite)),
+        BottomNavigationBarItem(label: 'En Cine', icon: Icon(Icons.movie)),
+        BottomNavigationBarItem(
+            label: 'Próximamente', icon: Icon(Icons.calendar_today)),
+      ],
+    );
+  }
+
   _backgroundApp(context) {
-
     final String imageUrl = moviesProvider.imagePath;
-    String image = movieSelected?.movie?.posterPath; 
-    // if (movieSelected == null) return Container();
-
-    //String image;
+    String image = movieSelected?.movie?.posterPath;
 
     return Stack(
       children: [
         if (image != null)
-        BackgroundWidget(
-          image: '$imageUrl$image',
-        ),
+          BackgroundWidget(
+            image: '$imageUrl$image',
+          ),
         _estructuraHome(context),
       ],
     );
@@ -152,26 +183,9 @@ class _HomePageState extends State<HomePage> {
             child: _listadoPeliculas(),
           ),
         ),
-        // _listadoGeneros(),
       ],
     );
   }
-
-  // _listadoGeneros() {
-  //   return FutureBuilder(
-  //       future: moviesProvider.getGenres(),
-  //       builder: (context, AsyncSnapshot<List<Genre>> snapshot) {
-  //         if (snapshot.hasError) {
-  //           return Center(child: Text("${snapshot.error}"));
-  //         } else if (!snapshot.hasData) {
-  //           return Container();
-  //         }
-
-  //         genres = snapshot.data;
-
-  //         return Container();
-  //       });
-  // }
 
   _listadoPeliculas() {
     return FutureBuilder(
