@@ -31,13 +31,17 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
+
+    print('init');
     genres = genresService.items;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    selectedMovie = Provider.of<Movie>(context, listen: false);
+
+    print('build');
+    selectedMovie = Provider.of<Movie>(context);//, listen: false);
 
     // genres = genresService.items;
 
@@ -109,14 +113,16 @@ class _HomePageState extends State<HomePage> {
   _backgroundApp(context) {
 
     final String imageUrl = moviesProvider.imagePath;
-
+    String image = selectedMovie?.selected?.posterPath; 
     // if (selectedMovie == null) return Container();
 
+    //String image;
 
     return Stack(
       children: [
+        if (image != null)
         BackgroundWidget(
-          // imageUrl: moviesProvider.imagePath,
+          image: '$imageUrl$image',
         ),
         _estructuraHome(context),
       ],
@@ -179,7 +185,7 @@ class _HomePageState extends State<HomePage> {
 
           if (snapshot.data.length > 0) {
             // moviesBloc.changeMovie(snapshot.data[0]);
-            selectedMovie.selected = snapshot.data[0];
+            // selectedMovie.selected = snapshot.data[0];
             // selectedMovie.selected = context.read<Movie>();
 
             // print(snapshot);
