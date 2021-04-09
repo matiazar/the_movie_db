@@ -27,7 +27,7 @@ class _HomePageState extends State<HomePage> {
   final genresService = new GenresService();
   List<Genre> genres;
 
-  Movie selectedMovie;
+  MovieSelected movieSelected;
 
   @override
   void initState() {
@@ -41,7 +41,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
 
     print('build');
-    selectedMovie = Provider.of<Movie>(context);//, listen: false);
+    movieSelected = Provider.of<MovieSelected>(context);//, listen: false);
 
     // genres = genresService.items;
 
@@ -113,8 +113,8 @@ class _HomePageState extends State<HomePage> {
   _backgroundApp(context) {
 
     final String imageUrl = moviesProvider.imagePath;
-    String image = selectedMovie?.selected?.posterPath; 
-    // if (selectedMovie == null) return Container();
+    String image = movieSelected?.movie?.posterPath; 
+    // if (movieSelected == null) return Container();
 
     //String image;
 
@@ -185,8 +185,8 @@ class _HomePageState extends State<HomePage> {
 
           if (snapshot.data.length > 0) {
             // moviesBloc.changeMovie(snapshot.data[0]);
-            // selectedMovie.selected = snapshot.data[0];
-            // selectedMovie.selected = context.read<Movie>();
+            // movieSelected.selected = snapshot.data[0];
+            // movieSelected.selected = context.read<Movie>();
 
             // print(snapshot);
             return Swiper(
@@ -206,7 +206,7 @@ class _HomePageState extends State<HomePage> {
                 // print(index);
 
                 // moviesBloc.changeMovie(snapshot.data[index]);
-                selectedMovie.selected = snapshot.data[index];
+                movieSelected.movie = snapshot.data[index];
 
                 // _posterPath = snapshot.data[index].posterPath;
 

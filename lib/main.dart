@@ -6,7 +6,7 @@ import 'src/pages/home_page.dart';
 import 'src/pages/details_page.dart';
 import 'src/providers/movies_provider.dart';
 
-void main() async {
+void main() {
   runApp(MyApp());
 }
 
@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => Movie())
+        ChangeNotifierProvider(create: (context) => MovieSelected())
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

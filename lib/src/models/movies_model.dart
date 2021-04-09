@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 
-/*
 class MovieSelected extends ChangeNotifier {
   Movie _movie = new Movie();
 
@@ -11,7 +10,7 @@ class MovieSelected extends ChangeNotifier {
     notifyListeners();
   }
 }
-*/
+
 class Movies {
   List<Movie> items = [];
 
@@ -27,16 +26,16 @@ class Movies {
   }
 }
 
-class Movie extends ChangeNotifier {
-  Movie _selected;
+// class Movie extends ChangeNotifier {
+  // Movie _selected;
 
-  Movie get selected => _selected;
+  // Movie get selected => _selected;
 
-  set selected(Movie movie) {
-    _selected = movie;
-    notifyListeners();
-  }
-
+  // set selected(Movie movie) {
+  //   _selected = movie;
+  //   notifyListeners();
+  // }
+class Movie {
   Movie({
     this.adult,
     this.backdropPath,
