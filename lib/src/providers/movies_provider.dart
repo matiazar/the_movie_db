@@ -55,6 +55,8 @@ class MoviesProvider {
   Future<List<Movie>> getMovies(String type) async {
     //movie/popular?api_key=0e685fd77fb3d76874a3ac26e0db8a4b&language=es-AR&page=1
 
+    print('get movies');
+
     var path;
 
     switch (type) {

@@ -25,6 +25,10 @@ class HomePage extends StatelessWidget {
   String _tipoPeliculas = 'Popular'; //Popular // Latest
   String _title = 'Populares';
 
+  int popularIndex = 0;
+  int upcomingIndex = 0;
+  int playingIndex = 0;
+
   final moviesProvider = new MoviesProvider();
 
   final genresService = new GenresService();
@@ -37,6 +41,8 @@ class HomePage extends StatelessWidget {
   //   genres = genresService.items;
   //   super.initState();
   // }
+
+  SwiperController swiperController = new SwiperController();
 
   @override
   Widget build(BuildContext context) {
@@ -125,15 +131,18 @@ class HomePage extends StatelessWidget {
           case 1:
             _title = 'En Cine';
             _tipoPeliculas = 'NowPlaying';
+            swiperController.move(playingIndex, animation: false);
             break;
 
           case 2:
             _title = 'Próximos Estrenos';
             _tipoPeliculas = 'Upcoming';
+            swiperController.move(upcomingIndex, animation: false);
             break;
           default:
             _title = 'Populares';
             _tipoPeliculas = 'Popular';
+            swiperController.move(popularIndex, animation: false);
             break;
           // default:
         }
@@ -205,6 +214,7 @@ class HomePage extends StatelessWidget {
 
             // print(snapshot);
             return Swiper(
+              controller: swiperController,
               // controller: PageController(viewportFraction: 0.8),
               itemCount: snapshot.data.length,
               itemBuilder: (context, index) =>
@@ -219,6 +229,20 @@ class HomePage extends StatelessWidget {
               // itemWidth: MediaQuery.of(context).size.height * .7,
               onIndexChanged: (index) {
                 // print(index);
+                // print(_tipoPeliculas);
+
+                switch (_tipoPeliculas) {
+                  case 'NowPlaying':
+                    playingIndex = index;
+                    break;
+                  case 'Upcoming':
+                    upcomingIndex = index;
+                    break;
+                  case 'Popular':
+                    popularIndex = index;
+                    break;
+                  // default:
+                }
 
                 // moviesBloc.changeMovie(snapshot.data[index]);
                 movieSelected.movie = snapshot.data[index];
