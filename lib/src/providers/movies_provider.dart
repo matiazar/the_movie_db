@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 
 import 'package:the_movie_db/src/models/casts_model.dart';
 import 'package:the_movie_db/src/models/movies_model.dart';
@@ -6,7 +7,7 @@ import 'package:the_movie_db/src/models/movies_model.dart';
 export 'package:the_movie_db/src/models/casts_model.dart';
 export 'package:the_movie_db/src/models/movies_model.dart';
 
-class MoviesProvider {
+class MoviesProvider extends ChangeNotifier {
   final _url = 'https://api.themoviedb.org/3/';
   final _apiKey = '0e685fd77fb3d76874a3ac26e0db8a4b';
   final _lang = 'es-ES';
@@ -27,6 +28,28 @@ class MoviesProvider {
       "language": _lang,
       "page": _page
     };
+
+    getMovies('Popular');
+  }
+
+  // MoviesProvider.init() {
+  //   getMovies('Popular');
+  // }
+
+  Movie _movie = new Movie();
+  Movie get movie => _movie;
+
+  set movie(Movie movie) {
+    _movie = movie;
+    notifyListeners();
+  }
+
+  List<Movie> _movies;
+  List<Movie> get movies => _movies;
+
+  set movies(List<Movie> movies) {
+    _movies = movies;
+    notifyListeners();
   }
 
   Future<List<Genre>> getGenres() async {
@@ -94,7 +117,9 @@ class MoviesProvider {
     }
 
     var movies = Movies.fromJson(_response.data['results']);
-    return movies.items;
+    // return movies.items;
+    this.movies = movies.items;
+    this.movie = movies.items.first;
   }
 
   Future<List<Movie>> search(String query) async {

@@ -5,21 +5,12 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:provider/provider.dart';
 
 import 'package:the_movie_db/src/models/movies_model.dart';
-import 'package:the_movie_db/src/models/navigation_model.dart';
+import 'package:the_movie_db/src/providers/navigation_provider.dart';
 import 'package:the_movie_db/src/providers/movies_provider.dart';
 import 'package:the_movie_db/src/search/search_delegate.dart';
 import 'package:the_movie_db/src/services/genres_service.dart';
 import 'package:the_movie_db/src/widgets/background.dart';
 
-// class HomePage extends StatefulWidget {
-//   const HomePage({Key key}) : super(key: key);
-
-//   @override
-//   _HomePageState createState() => _HomePageState();
-// }
-
-// class _HomePageState extends State<HomePage> {
-//
 class HomePage extends StatelessWidget {
   //
   String _tipoPeliculas = 'Popular'; //Popular // Latest
@@ -29,18 +20,10 @@ class HomePage extends StatelessWidget {
   int upcomingIndex = 0;
   int playingIndex = 0;
 
-  final moviesProvider = new MoviesProvider();
+  // final moviesProvider = new MoviesProvider();
 
   final genresService = new GenresService();
   List<Genre> genres;
-
-  // MovieSelected movieSelected;
-  // @override
-  // void initState() {
-  //   print('init');
-  //   genres = genresService.items;
-  //   super.initState();
-  // }
 
   SwiperController swiperController = new SwiperController();
 
@@ -119,13 +102,13 @@ class HomePage extends StatelessWidget {
   }
 
   BottomNavigationBar _navigationBar(context) {
-    final navigationModel = Provider.of<NavigationModel>(context);
+    final navigationProvider = Provider.of<NavigationProvider>(context);
 
     return BottomNavigationBar(
-      currentIndex: navigationModel.index,
+      currentIndex: navigationProvider.index,
       onTap: (index) {
         // print(index);
-        navigationModel.index = index;
+        navigationProvider.index = index;
 
         switch (index) {
           case 1:
@@ -146,6 +129,9 @@ class HomePage extends StatelessWidget {
             break;
           // default:
         }
+
+        Provider.of<MoviesProvider>(context, listen: false)
+            .getMovies(_tipoPeliculas);
       },
       items: [
         BottomNavigationBarItem(label: 'Populares', icon: Icon(Icons.favorite)),
@@ -157,15 +143,15 @@ class HomePage extends StatelessWidget {
   }
 
   _backgroundApp(context) {
-    final String imageUrl = moviesProvider.imagePath;
+    final String imageUrl = Provider.of<MoviesProvider>(context).imagePath;
     // String image = movieSelected?.movie?.posterPath;
 
     // if (image != null) image = imageUrl + image;
 
     return Stack(
       children: [
-        Consumer<MovieSelected>(builder: (context, movieSelected, child) {
-          String image = movieSelected?.movie?.posterPath;
+        Consumer<MoviesProvider>(builder: (context, data, child) {
+          String image = data?.movie?.posterPath;
           if (image != null) image = imageUrl + image;
           return BackgroundWidget(image: image);
         }),
@@ -202,81 +188,122 @@ class HomePage extends StatelessWidget {
   }
 
   _listadoPeliculas(context) {
-    return FutureBuilder(
-        future: moviesProvider.getMovies(_tipoPeliculas),
-        builder: (context, AsyncSnapshot<List<Movie>> snapshot) {
-          if (snapshot.hasError) {
-            return Center(child: Text("${snapshot.error}"));
-          } else if (!snapshot.hasData) {
-            return Center(child: CircularProgressIndicator());
-          }
+    return Consumer<MoviesProvider>(
+      builder: (context, data, child) {
+        if (data.movies == null) {
+          return Center(child: CircularProgressIndicator());
+        }
 
-          if (snapshot.data.length > 0) {
-            // moviesBloc.changeMovie(snapshot.data[0]);
-            // movieSelected.movie = snapshot.data[0];
-            // movieSelected.selected = context.read<Movie>();
-            //
-            // Provider.of<MovieSelected>(context, listen: false)
-            //         .assignMovie(movie: snapshot.data[0]);
+        return Swiper(
+          controller: swiperController,
+          // controller: PageController(viewportFraction: 0.8),
+          itemCount: data.movies.length,
+          itemBuilder: (context, index) =>
+              _verMovie(data.movies[index], context),
+          // itemCount: 3,
+          viewportFraction: 0.7,
+          scale: 0.6,
+          // pagination: new SwiperPagination(),
+          control: new SwiperControl(),
+          // layout: SwiperLayout.TINDER,
+          // itemHeight: MediaQuery.of(context).size.height * .6,
+          // itemWidth: MediaQuery.of(context).size.height * .7,
+          onIndexChanged: (index) {
+            switch (_tipoPeliculas) {
+              case 'NowPlaying':
+                playingIndex = index;
+                break;
+              case 'Upcoming':
+                upcomingIndex = index;
+                break;
+              case 'Popular':
+                popularIndex = index;
+                break;
+              // default:
+            }
 
-            // print(snapshot);
-            return Swiper(
-              controller: swiperController,
-              // controller: PageController(viewportFraction: 0.8),
-              itemCount: snapshot.data.length,
-              itemBuilder: (context, index) =>
-                  _verMovie(snapshot.data[index], context),
-              // itemCount: 3,
-              viewportFraction: 0.7,
-              scale: 0.6,
-              // pagination: new SwiperPagination(),
-              control: new SwiperControl(),
-              // layout: SwiperLayout.TINDER,
-              // itemHeight: MediaQuery.of(context).size.height * .6,
-              // itemWidth: MediaQuery.of(context).size.height * .7,
-              onIndexChanged: (index) {
-                // print(index);
-                // print(_tipoPeliculas);
+            Provider.of<MoviesProvider>(context, listen: false).movie =
+                data.movies[index];
+          },
+        );
+      },
+    );
 
-                switch (_tipoPeliculas) {
-                  case 'NowPlaying':
-                    playingIndex = index;
-                    break;
-                  case 'Upcoming':
-                    upcomingIndex = index;
-                    break;
-                  case 'Popular':
-                    popularIndex = index;
-                    break;
-                  // default:
-                }
+    // return FutureBuilder(
+    //     future: moviesProvider.getMovies(_tipoPeliculas),
+    //     builder: (context, AsyncSnapshot<List<Movie>> snapshot) {
+    //       if (snapshot.hasError) {
+    //         return Center(child: Text("${snapshot.error}"));
+    //       } else if (!snapshot.hasData) {
+    //         return Center(child: CircularProgressIndicator());
+    //       }
 
-                // moviesBloc.changeMovie(snapshot.data[index]);
-                // movieSelected.movie = snapshot.data[index];
-                // Provider.of<MovieSelected>(context, listen: false).movie = snapshot.data[index];
-                //
-                //
-                //
-                Provider.of<MovieSelected>(context, listen: false)
-                    .assignMovie(movie: snapshot.data[index]);
+    //       if (snapshot.data.length > 0) {
+    //         // moviesBloc.changeMovie(snapshot.data[0]);
+    //         // movieSelected.movie = snapshot.data[0];
+    //         // movieSelected.selected = context.read<Movie>();
+    //         //
+    //         // Provider.of<MovieSelected>(context, listen: false)
+    //         //         .assignMovie(movie: snapshot.data[0]);
 
-                // _posterPath = snapshot.data[index].posterPath;
+    //         // print(snapshot);
+    //         return Swiper(
+    //           controller: swiperController,
+    //           // controller: PageController(viewportFraction: 0.8),
+    //           itemCount: snapshot.data.length,
+    //           itemBuilder: (context, index) =>
+    //               _verMovie(snapshot.data[index], context),
+    //           // itemCount: 3,
+    //           viewportFraction: 0.7,
+    //           scale: 0.6,
+    //           // pagination: new SwiperPagination(),
+    //           control: new SwiperControl(),
+    //           // layout: SwiperLayout.TINDER,
+    //           // itemHeight: MediaQuery.of(context).size.height * .6,
+    //           // itemWidth: MediaQuery.of(context).size.height * .7,
+    //           onIndexChanged: (index) {
+    //             // print(index);
+    //             // print(_tipoPeliculas);
 
-                // BackgroundWidget().refresh();
+    //             switch (_tipoPeliculas) {
+    //               case 'NowPlaying':
+    //                 playingIndex = index;
+    //                 break;
+    //               case 'Upcoming':
+    //                 upcomingIndex = index;
+    //                 break;
+    //               case 'Popular':
+    //                 popularIndex = index;
+    //                 break;
+    //               // default:
+    //             }
 
-                // if (backWidget.currentState != null)
-                //   backWidget.currentState.setState(() {
-                //     _posterPath = snapshot.data[index].posterPath;
-                //   });
-                // setState(() {
-                // _posterPath = snapshot.data[index].posterPath;
-                // });
-              },
-            );
-          }
+    //             // moviesBloc.changeMovie(snapshot.data[index]);
+    //             // movieSelected.movie = snapshot.data[index];
+    //             // Provider.of<MovieSelected>(context, listen: false).movie = snapshot.data[index];
+    //             //
+    //             //
+    //             //
+    //             Provider.of<MovieSelected>(context, listen: false)
+    //                 .assignMovie(movie: snapshot.data[index]);
 
-          return Container();
-        });
+    //             // _posterPath = snapshot.data[index].posterPath;
+
+    //             // BackgroundWidget().refresh();
+
+    //             // if (backWidget.currentState != null)
+    //             //   backWidget.currentState.setState(() {
+    //             //     _posterPath = snapshot.data[index].posterPath;
+    //             //   });
+    //             // setState(() {
+    //             // _posterPath = snapshot.data[index].posterPath;
+    //             // });
+    //           },
+    //         );
+    //       }
+
+    //       return Container();
+    //     });
   }
 
   _verMovie(Movie movie, context) {

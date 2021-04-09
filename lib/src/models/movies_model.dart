@@ -1,21 +1,5 @@
 import 'package:flutter/cupertino.dart';
 
-class MovieSelected extends ChangeNotifier {
-  Movie _movie = new Movie();
-
-  Movie get movie => _movie;
-
-  // set movie(Movie movie) {
-  //   _movie = movie;
-  //   notifyListeners();
-  // }
-
-  void assignMovie({Movie movie}) {
-    _movie = movie;
-    notifyListeners();
-  }
-}
-
 class Movies {
   List<Movie> items = [];
 
@@ -31,15 +15,6 @@ class Movies {
   }
 }
 
-// class Movie extends ChangeNotifier {
-// Movie _selected;
-
-// Movie get selected => _selected;
-
-// set selected(Movie movie) {
-//   _selected = movie;
-//   notifyListeners();
-// }
 class Movie {
   Movie({
     this.adult,
