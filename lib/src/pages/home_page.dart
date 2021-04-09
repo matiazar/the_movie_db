@@ -34,7 +34,7 @@ class HomePage extends StatelessWidget {
   final genresService = new GenresService();
   List<Genre> genres;
 
-  MovieSelected movieSelected;
+  // MovieSelected movieSelected;
   // @override
   // void initState() {
   //   print('init');
@@ -47,7 +47,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print('build');
-    movieSelected = Provider.of<MovieSelected>(context); //, listen: false);
+    // movieSelected = Provider.of<MovieSelected>(context); //, listen: false);
 
     genres = genresService.items;
 
@@ -158,13 +158,17 @@ class HomePage extends StatelessWidget {
 
   _backgroundApp(context) {
     final String imageUrl = moviesProvider.imagePath;
-    String image = movieSelected?.movie?.posterPath;
+    // String image = movieSelected?.movie?.posterPath;
 
-    if (image != null) image = imageUrl + image;
+    // if (image != null) image = imageUrl + image;
 
     return Stack(
       children: [
-        BackgroundWidget(image: image),
+        Consumer<MovieSelected>(builder: (context, movieSelected, child) {
+          String image = movieSelected?.movie?.posterPath;
+          if (image != null) image = imageUrl + image;
+          return BackgroundWidget(image: image);
+        }),
         _estructuraHome(context),
       ],
     );
@@ -190,14 +194,14 @@ class HomePage extends StatelessWidget {
         ),
         Expanded(
           child: Center(
-            child: _listadoPeliculas(),
+            child: _listadoPeliculas(context),
           ),
         ),
       ],
     );
   }
 
-  _listadoPeliculas() {
+  _listadoPeliculas(context) {
     return FutureBuilder(
         future: moviesProvider.getMovies(_tipoPeliculas),
         builder: (context, AsyncSnapshot<List<Movie>> snapshot) {
@@ -211,6 +215,9 @@ class HomePage extends StatelessWidget {
             // moviesBloc.changeMovie(snapshot.data[0]);
             // movieSelected.movie = snapshot.data[0];
             // movieSelected.selected = context.read<Movie>();
+            //
+            // Provider.of<MovieSelected>(context, listen: false)
+            //         .assignMovie(movie: snapshot.data[0]);
 
             // print(snapshot);
             return Swiper(
@@ -245,7 +252,13 @@ class HomePage extends StatelessWidget {
                 }
 
                 // moviesBloc.changeMovie(snapshot.data[index]);
-                movieSelected.movie = snapshot.data[index];
+                // movieSelected.movie = snapshot.data[index];
+                // Provider.of<MovieSelected>(context, listen: false).movie = snapshot.data[index];
+                //
+                //
+                //
+                Provider.of<MovieSelected>(context, listen: false)
+                    .assignMovie(movie: snapshot.data[index]);
 
                 // _posterPath = snapshot.data[index].posterPath;
 
@@ -269,10 +282,7 @@ class HomePage extends StatelessWidget {
   _verMovie(Movie movie, context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, 'Details',
-            // arguments: {'movie': movie, 'genres': genres});
-            arguments: {'movie': movie});
-        // print(movie);
+        Navigator.pushNamed(context, 'Details', arguments: {'movie': movie});
       },
       child: Center(
         child: Column(
