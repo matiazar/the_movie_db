@@ -4,7 +4,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class BackgroundWidget extends StatelessWidget {
-
   final String image;
   BackgroundWidget({Key key, this.image}) : super(key: key);
 
@@ -12,12 +11,9 @@ class BackgroundWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        // color: Colors.black,
-        image: (image != 'null')
-            ? DecorationImage(
-                image: NetworkImage(
-                    image),
-                fit: BoxFit.cover)
+        color: Colors.black,
+        image: (image != null)
+            ? DecorationImage(image: NetworkImage(image), fit: BoxFit.cover)
             : null,
       ),
       width: double.infinity,

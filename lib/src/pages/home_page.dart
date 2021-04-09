@@ -151,12 +151,11 @@ class HomePage extends StatelessWidget {
     final String imageUrl = moviesProvider.imagePath;
     String image = movieSelected?.movie?.posterPath;
 
+    if (image != null) image = imageUrl + image;
+
     return Stack(
       children: [
-        if (image != null)
-          BackgroundWidget(
-            image: '$imageUrl$image',
-          ),
+        BackgroundWidget(image: image),
         _estructuraHome(context),
       ],
     );
@@ -201,7 +200,7 @@ class HomePage extends StatelessWidget {
 
           if (snapshot.data.length > 0) {
             // moviesBloc.changeMovie(snapshot.data[0]);
-            // movieSelected.selected = snapshot.data[0];
+            // movieSelected.movie = snapshot.data[0];
             // movieSelected.selected = context.read<Movie>();
 
             // print(snapshot);
@@ -240,19 +239,6 @@ class HomePage extends StatelessWidget {
           }
 
           return Container();
-
-          // return PageView.builder(
-          //   controller: PageController(viewportFraction: 0.8),
-          //   itemCount: snapshot.data.length,
-          //   itemBuilder: (context, index) =>
-          //       _verMovie(snapshot.data[index], context),
-          //   onPageChanged: (index) {
-          //     // print(index);
-          //     setState(() {
-          //       _posterPath = snapshot.data[index].posterPath;
-          //     });
-          //   },
-          // );
         });
   }
 
