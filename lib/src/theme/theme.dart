@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 final ThemeData theme = ThemeData(
     primarySwatch: Colors.blue,
+    fontFamily: 'Raleway',
     textTheme: TextTheme(
       headline3: TextStyle(color: Colors.white, fontFamily: 'Calibri'),
       headline5:

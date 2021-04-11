@@ -30,7 +30,7 @@ class HomePage extends StatelessWidget {
     // movieSelected = Provider.of<MovieSelected>(context); //, listen: false);
 
     final genresService = new GenresService();
-    List<Genre> genres = genresService.items;
+    // List<Genre> genres = genresService.items;
 
     return Scaffold(
       bottomNavigationBar: _navigationBar(context),

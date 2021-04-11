@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:the_movie_db/src/models/movies_model.dart';
-import 'package:the_movie_db/src/providers/navigation_provider.dart';
+
 import 'package:the_movie_db/src/theme/theme.dart';
 
 import 'src/pages/home_page.dart';
 import 'src/pages/details_page.dart';
 import 'src/providers/movies_provider.dart';
+import 'src/providers/navigation_provider.dart';
 
 void main() {
   runApp(MyApp());

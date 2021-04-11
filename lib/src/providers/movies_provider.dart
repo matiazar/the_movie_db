@@ -119,9 +119,11 @@ class MoviesProvider extends ChangeNotifier {
     }
 
     var movies = Movies.fromJson(_response.data['results']);
-    // return movies.items;
+
     this.movies = movies.items;
     this.movie = movies.items.first;
+
+    return movies.items;
   }
 
   Future<List<Movie>> search(String query) async {
