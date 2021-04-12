@@ -1,7 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_swiper/flutter_swiper.dart';
 
 import 'package:the_movie_db/src/models/casts_model.dart';
+import 'package:the_movie_db/src/models/categories_model.dart';
 import 'package:the_movie_db/src/models/genres_model.dart';
 import 'package:the_movie_db/src/models/movies_model.dart';
 
@@ -15,11 +17,18 @@ class MoviesProvider extends ChangeNotifier {
   final _lang = 'es-ES';
   final imagePath = 'https://image.tmdb.org/t/p/w500/';
 
+  List<Category> categories = [
+    Category('Populares', 'Popular', 0),
+    Category('En Cine', 'NowPlaying', 0),
+    Category('Próximos Estrenos', 'Upcoming', 0),
+  ];
+
+  SwiperController swiperController = new SwiperController();
+
   int _page = 1;
   Dio dio = new Dio(); // with default Options
   Response _response;
 
-  // 3/movie/popular?api_key=0e685fd77fb3d76874a3ac26e0db8a4b&language=es-AR&page=1
   MoviesProvider() {
     _initDio();
   }
@@ -27,7 +36,7 @@ class MoviesProvider extends ChangeNotifier {
   MoviesProvider.init() {
     _initDio();
     getGenres();
-    getMovies('Popular');
+    getMovies(categories[0].url);
   }
 
   _initDio() {
@@ -40,10 +49,6 @@ class MoviesProvider extends ChangeNotifier {
       "page": _page
     };
   }
-
-  // MoviesProvider.init() {
-  //   getMovies('Popular');
-  // }
 
   Movie _movie = new Movie();
   Movie get movie => _movie;
