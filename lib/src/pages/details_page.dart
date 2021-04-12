@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 // import 'package:the_movie_db/src/models/movies_model.dart';
 import 'package:the_movie_db/src/providers/movies_provider.dart';
-import 'package:the_movie_db/src/services/genres_service.dart';
+// import 'package:the_movie_db/src/services/genres_service.dart';
 
 import 'package:the_movie_db/src/widgets/video_player.dart';
 
@@ -13,7 +14,7 @@ class DetailsPage extends StatelessWidget {
 
   Movie movie;
 
-  final genresService = new GenresService();
+  // final genresService = new GenresService();
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +37,7 @@ class DetailsPage extends StatelessWidget {
       body: SafeArea(
         child: ListView(children: [
           _poster(),
-          _posterInfo(),
+          _posterInfo(context),
           _descripcion(),
           _actores(),
           _video(),
@@ -48,7 +49,7 @@ class DetailsPage extends StatelessWidget {
     );
   }
 
-  _posterInfo() {
+  _posterInfo(context) {
     return Container(
       // color: Colors.blue,
       padding: const EdgeInsets.all(8.0),
@@ -65,7 +66,7 @@ class DetailsPage extends StatelessWidget {
                 children: [
                   _titulo(),
                   SizedBox(height: 5),
-                  _generos(),
+                  _generos(context),
                   SizedBox(height: 5),
                   _promedio(),
                 ]),
@@ -203,11 +204,16 @@ class DetailsPage extends StatelessWidget {
     );
   }
 
-  _generos() {
+  _generos(context) {
     List tmpStrings = [];
+
+    Genres genres = Provider.of<MoviesProvider>(context).genres;
+
     movie.genreIds.forEach((genreId) {
-      Genre genre =
-          genresService.genres.list.firstWhere((element) => element.id == genreId);
+      // Genre genre =
+      // genresService.genres.list.firstWhere((element) => element.id == genreId);
+
+      Genre genre = genres.list.firstWhere((element) => element.id == genreId);
 
       tmpStrings.add(genre.name);
     });

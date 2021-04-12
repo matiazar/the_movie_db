@@ -21,7 +21,16 @@ class MoviesProvider extends ChangeNotifier {
 
   // 3/movie/popular?api_key=0e685fd77fb3d76874a3ac26e0db8a4b&language=es-AR&page=1
   MoviesProvider() {
-    // Set default configs
+    _initDio();
+  }
+
+  MoviesProvider.init() {
+    _initDio();
+    getGenres();
+    getMovies('Popular');
+  }
+
+  _initDio() {
     dio.options.baseUrl = _url;
     // dio.options.connectTimeout = 5000; //5s
     // dio.options.receiveTimeout = 3000;
@@ -30,8 +39,6 @@ class MoviesProvider extends ChangeNotifier {
       "language": _lang,
       "page": _page
     };
-
-    getMovies('Popular');
   }
 
   // MoviesProvider.init() {
@@ -54,9 +61,17 @@ class MoviesProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  Genres _genres;
+  Genres get genres => _genres;
+
+  set genres(Genres genres) {
+    _genres = genres;
+    notifyListeners();
+  }
+
   Future<Genres> getGenres() async {
     //movie/popular?api_key=0e685fd77fb3d76874a3ac26e0db8a4b&language=es-AR&page=1
-
+    print('get genres');
     final path = 'genre/movie/list';
 
     try {
@@ -74,6 +89,9 @@ class MoviesProvider extends ChangeNotifier {
     }
 
     var genres = Genres.fromJson(_response.data['genres']);
+
+    this.genres = genres;
+
     // return genres.items;
     return genres;
   }

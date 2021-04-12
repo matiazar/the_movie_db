@@ -8,7 +8,7 @@ import 'package:the_movie_db/src/models/movies_model.dart';
 import 'package:the_movie_db/src/providers/navigation_provider.dart';
 import 'package:the_movie_db/src/providers/movies_provider.dart';
 import 'package:the_movie_db/src/search/search_delegate.dart';
-import 'package:the_movie_db/src/services/genres_service.dart';
+// import 'package:the_movie_db/src/services/genres_service.dart';
 import 'package:the_movie_db/src/widgets/background.dart';
 
 class HomePage extends StatelessWidget {
@@ -20,8 +20,7 @@ class HomePage extends StatelessWidget {
   int upcomingIndex = 0;
   int playingIndex = 0;
 
-  final genresService = new GenresService();
-
+  // final genresService = new GenresService();
   // final moviesProvider = new MoviesProvider();
 
   SwiperController swiperController = new SwiperController();
@@ -30,6 +29,9 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     print('build');
     // movieSelected = Provider.of<MovieSelected>(context); //, listen: false);
+
+    // Provider.of<MoviesProvider>(context, listen: false).getGenres();
+            
 
     // List<Genre> genres = genresService.items;
 
