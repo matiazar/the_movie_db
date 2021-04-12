@@ -51,8 +51,8 @@ class HomePage extends StatelessWidget {
         navigationProvider.index = index;
         swiperController.move(categories[index].index, animation: false);
 
-        Provider.of<MoviesProvider>(context, listen: false)
-            .getMovies(categories[index]);
+        // Provider.of<MoviesProvider>(context, listen: false)
+        //     .getMovies(categories[index]);
       },
       items: [
         BottomNavigationBarItem(
