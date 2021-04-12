@@ -52,7 +52,7 @@ class HomePage extends StatelessWidget {
         swiperController.move(categories[index].index, animation: false);
 
         Provider.of<MoviesProvider>(context, listen: false)
-            .getMovies(categories[index].url);
+            .getMovies(categories[index]);
       },
       items: [
         BottomNavigationBarItem(
@@ -121,28 +121,32 @@ class HomePage extends StatelessWidget {
 
     return Consumer<MoviesProvider>(
       builder: (context, data, child) {
-        if (data.movies == null) {
+        final List<Movie> moviesList =
+            data.categories[navigationProvider.index].movies?.list;
+
+        if (moviesList == null) {
           return Center(child: CircularProgressIndicator());
         }
 
         return Swiper(
+          loop: false,
           controller: swiperController,
           // controller: PageController(viewportFraction: 0.8),
-          itemCount: data.movies.length,
+          itemCount: moviesList.length,
           itemBuilder: (context, index) =>
-              _verMovie(data.movies[index], context),
+              _verMovie(moviesList[index], context),
           // itemCount: 3,
           viewportFraction: 0.7,
-          scale: 0.6,
+          scale: 0.8,
           // pagination: new SwiperPagination(),
-          control: new SwiperControl(),
+          // control: new SwiperControl(),
           // layout: SwiperLayout.TINDER,
           // itemHeight: MediaQuery.of(context).size.height * .6,
           // itemWidth: MediaQuery.of(context).size.height * .7,
           onIndexChanged: (index) {
             categories[navigationProvider.index].index = index;
             Provider.of<MoviesProvider>(context, listen: false).movie =
-                data.movies[index];
+                moviesList[index];
           },
         );
       },

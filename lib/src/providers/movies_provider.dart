@@ -18,9 +18,9 @@ class MoviesProvider extends ChangeNotifier {
   final imagePath = 'https://image.tmdb.org/t/p/w500/';
 
   List<Category> categories = [
-    Category('Populares', 'Popular', 0),
-    Category('En Cine', 'NowPlaying', 0),
-    Category('Próximos Estrenos', 'Upcoming', 0),
+    Category(title: 'Populares', url: 'Popular'),
+    Category(title: 'En Cine', url: 'NowPlaying'),
+    Category(title: 'Próximos Estrenos', url: 'Upcoming'),
   ];
 
   SwiperController swiperController = new SwiperController();
@@ -36,7 +36,9 @@ class MoviesProvider extends ChangeNotifier {
   MoviesProvider.init() {
     _initDio();
     getGenres();
-    getMovies(categories[0].url);
+    getMovies(categories[0]);
+    getMovies(categories[1]);
+    getMovies(categories[2]);
   }
 
   _initDio() {
@@ -58,13 +60,13 @@ class MoviesProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  List<Movie> _movies;
-  List<Movie> get movies => _movies;
+  // List<Movie> _movies;
+  // List<Movie> get movies => _movies;
 
-  set movies(List<Movie> movies) {
-    _movies = movies;
-    notifyListeners();
-  }
+  // set movies(List<Movie> movies) {
+  //   _movies = movies;
+  //   notifyListeners();
+  // }
 
   Genres _genres;
   Genres get genres => _genres;
@@ -96,19 +98,20 @@ class MoviesProvider extends ChangeNotifier {
     var genres = Genres.fromJson(_response.data['genres']);
 
     this.genres = genres;
+    notifyListeners();
 
     // return genres.items;
     return genres;
   }
 
-  Future<Movies> getMovies(String type) async {
+  Future<Movies> getMovies(Category category) async {
     //movie/popular?api_key=0e685fd77fb3d76874a3ac26e0db8a4b&language=es-AR&page=1
 
     print('get movies');
 
     var path;
 
-    switch (type) {
+    switch (category.url) {
       // case 'Populars': final path = 'movie/popular'; break;
       case 'Upcoming':
         path = 'movie/upcoming';
@@ -144,8 +147,11 @@ class MoviesProvider extends ChangeNotifier {
 
     var movies = Movies.fromJson(_response.data['results']);
 
-    this.movies = movies.list;
-    this.movie = movies.list.first;
+    // this.movies = movies.list;
+    // this.movie = movies.list.first;
+
+    category.movies = movies;
+    notifyListeners();
 
     return movies;
   }
