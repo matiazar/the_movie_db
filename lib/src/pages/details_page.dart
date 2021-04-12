@@ -207,7 +207,7 @@ class DetailsPage extends StatelessWidget {
     List tmpStrings = [];
     movie.genreIds.forEach((genreId) {
       Genre genre =
-          genresService.items.firstWhere((element) => element.id == genreId);
+          genresService.genres.list.firstWhere((element) => element.id == genreId);
 
       tmpStrings.add(genre.name);
     });

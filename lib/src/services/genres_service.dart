@@ -1,7 +1,7 @@
 import 'package:the_movie_db/src/providers/movies_provider.dart';
 
 class GenresService {
-  List<Genre> _items = [];
+  Genres _genres;
 
   static final GenresService _singleton = new GenresService._internal();
 
@@ -12,10 +12,10 @@ class GenresService {
     _obtenerGeneros();
   }
 
-  List<Genre> get items => _items;
+  Genres get genres => _genres;
 
   void _obtenerGeneros() async {
     final moviesProvider = new MoviesProvider();
-    _items = await moviesProvider.getGenres();
+    _genres = await moviesProvider.getGenres();
   }
 }

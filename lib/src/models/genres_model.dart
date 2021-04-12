@@ -1,15 +1,16 @@
 class Genres {
-  List<Genre> items = [];
+  List<Genre> list = [];
 
-  Genres();
+  Genres({this.list});
 
-  Genres.fromJson(List<dynamic> jsonList) {
-    if (jsonList == null) return;
+  factory Genres.fromJson(List<dynamic> jsonList) {
+    final List<Genre> genres = [];
 
     jsonList.forEach((json) {
-      Genre genre = Genre.fromJson(json);
-      items.add(genre);
+      genres.add(Genre.fromJson(json));
     });
+
+    return Genres(list: genres);
   }
 }
 

@@ -54,7 +54,7 @@ class MoviesProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<List<Genre>> getGenres() async {
+  Future<Genres> getGenres() async {
     //movie/popular?api_key=0e685fd77fb3d76874a3ac26e0db8a4b&language=es-AR&page=1
 
     final path = 'genre/movie/list';
@@ -74,10 +74,11 @@ class MoviesProvider extends ChangeNotifier {
     }
 
     var genres = Genres.fromJson(_response.data['genres']);
-    return genres.items;
+    // return genres.items;
+    return genres;
   }
 
-  Future<List<Movie>> getMovies(String type) async {
+  Future<Movies> getMovies(String type) async {
     //movie/popular?api_key=0e685fd77fb3d76874a3ac26e0db8a4b&language=es-AR&page=1
 
     print('get movies');
@@ -120,16 +121,16 @@ class MoviesProvider extends ChangeNotifier {
 
     var movies = Movies.fromJson(_response.data['results']);
 
-    this.movies = movies.items;
-    this.movie = movies.items.first;
+    this.movies = movies.list;
+    this.movie = movies.list.first;
 
-    return movies.items;
+    return movies;
   }
 
-  Future<List<Movie>> search(String query) async {
+  Future<Movies> search(String query) async {
     //search/movie?api_key=<<api_key>>&language=en-US&page=1&include_adult=false
 
-    if (query == null || query == '') return [];
+    if (query == null || query == '') return Movies();
 
     final path = 'search/movie';
 
@@ -149,7 +150,7 @@ class MoviesProvider extends ChangeNotifier {
     }
 
     var movies = Movies.fromJson(_response.data['results']);
-    return movies.items;
+    return movies;
   }
 
   Future<Movie> get() {
@@ -158,7 +159,7 @@ class MoviesProvider extends ChangeNotifier {
     return Future.value(a);
   }
 
-  Future<List<Movie>> getSimilar(Movie movie) async {
+  Future<Movies> getSimilar(Movie movie) async {
     final path = 'movie/${movie.id}/similar';
 
     try {
@@ -176,7 +177,7 @@ class MoviesProvider extends ChangeNotifier {
     }
 
     var movies = Movies.fromJson(_response.data['results']);
-    return movies.items;
+    return movies;
   }
 
   Future<List<Cast>> getCast(Movie movie) async {

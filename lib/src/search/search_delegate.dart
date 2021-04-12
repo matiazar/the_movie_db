@@ -56,20 +56,20 @@ class CustomSearchDelegate extends SearchDelegate {
 
     return FutureBuilder(
         future: moviesProvider.search(query),
-        builder: (context, AsyncSnapshot<List<Movie>> snapshot) {
+        builder: (context, AsyncSnapshot<Movies> snapshot) {
           if (snapshot.hasError) {
             return Center(child: Text("${snapshot.error}"));
           } else if (!snapshot.hasData) {
             return Center(child: CircularProgressIndicator());
           }
 
-          if (snapshot.data.length == 0)
+          if (snapshot.data.list.length == 0)
             return Center(
                 child:
                     Text('No se encontraron peliculas con la frase "$query".'));
 
           return ListView(
-            children: snapshot.data.map((movie) {
+            children: snapshot.data.list.map((movie) {
               return ListTile(
                 trailing: Icon(Icons.arrow_forward),
                 title: Text(

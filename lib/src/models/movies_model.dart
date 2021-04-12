@@ -1,15 +1,16 @@
 class Movies {
-  List<Movie> items = [];
+  List<Movie> list = [];
 
-  Movies();
+  Movies({this.list});
 
-  Movies.fromJson(List<dynamic> jsonList) {
-    if (jsonList == null) return;
+  factory Movies.fromJson(List<dynamic> jsonList) {
+    final List<Movie> movies = [];
 
     jsonList.forEach((json) {
-      Movie movie = Movie.fromJson(json);
-      items.add(movie);
+      movies.add(Movie.fromJson(json));
     });
+
+    return Movies(list: movies);
   }
 }
 
