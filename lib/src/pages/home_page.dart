@@ -51,6 +51,9 @@ class HomePage extends StatelessWidget {
         navigationProvider.index = index;
         swiperController.move(categories[index].index, animation: false);
 
+        Provider.of<MoviesProvider>(context, listen: false).movie =
+            categories[index].movies.list[categories[index].index];
+
         // Provider.of<MoviesProvider>(context, listen: false)
         //     .getMovies(categories[index]);
       },
