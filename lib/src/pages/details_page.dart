@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 // import 'package:the_movie_db/src/models/movies_model.dart';
 import 'package:the_movie_db/src/providers/movies_provider.dart';
+import 'package:the_movie_db/src/providers/service_provider.dart';
 // import 'package:the_movie_db/src/services/genres_service.dart';
 
 import 'package:the_movie_db/src/widgets/video_player.dart';
@@ -10,7 +11,7 @@ import 'package:the_movie_db/src/widgets/video_player.dart';
 class DetailsPage extends StatelessWidget {
   // DetailsPage({Key key}) : super(key: key);
 
-  final moviesProvider = new MoviesProvider();
+  final serviceProvider = new ServiceProvider();
 
   Movie movie;
 
@@ -114,7 +115,7 @@ class DetailsPage extends StatelessWidget {
 
   _actoresListado() {
     return FutureBuilder(
-        future: moviesProvider.getCast(movie),
+        future: serviceProvider.getCast(movie),
         builder: (context, AsyncSnapshot<List<Cast>> snapshot) {
           if (snapshot.hasError) {
             return Center(child: Text("${snapshot.error}"));
@@ -144,7 +145,7 @@ class DetailsPage extends StatelessWidget {
               ? FadeInImage(
                   placeholder: AssetImage('assets/default_profile.png'),
                   image: NetworkImage(
-                      '${moviesProvider.imagePath}${cast.profilePath}'),
+                      '${serviceProvider.imagePath}${cast.profilePath}'),
                   height: 120,
                   width: 100,
                   fit: BoxFit.fill,
@@ -178,14 +179,14 @@ class DetailsPage extends StatelessWidget {
   }
 
   _poster() {
-    return Image.network('${moviesProvider.imagePath}${movie.backdropPath}');
+    return Image.network('${serviceProvider.imagePath}${movie.backdropPath}');
   }
 
   _imagen() {
     return ClipRRect(
       borderRadius: BorderRadius.circular(10.0),
       child: Image.network(
-        '${moviesProvider.imagePath}${movie.posterPath}',
+        '${serviceProvider.imagePath}${movie.posterPath}',
         fit: BoxFit.cover,
         width: 150.0,
       ),

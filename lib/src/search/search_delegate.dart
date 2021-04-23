@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:the_movie_db/src/providers/movies_provider.dart';
+import 'package:the_movie_db/src/providers/service_provider.dart';
 
 class CustomSearchDelegate extends SearchDelegate {
-  final moviesProvider = new MoviesProvider();
+  final serviceProvider = new ServiceProvider();
 
   @override
   String get searchFieldLabel => "Buscador de Películas";
@@ -55,7 +55,7 @@ class CustomSearchDelegate extends SearchDelegate {
     if (query == '') return Container();
 
     return FutureBuilder(
-        future: moviesProvider.search(query),
+        future: serviceProvider.search(query),
         builder: (context, AsyncSnapshot<Movies> snapshot) {
           if (snapshot.hasError) {
             return Center(child: Text("${snapshot.error}"));

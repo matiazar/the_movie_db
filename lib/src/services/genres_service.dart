@@ -1,4 +1,4 @@
-import 'package:the_movie_db/src/providers/movies_provider.dart';
+import 'package:the_movie_db/src/providers/service_provider.dart';
 
 class GenresService {
   Genres _genres;
@@ -15,7 +15,7 @@ class GenresService {
   Genres get genres => _genres;
 
   void _obtenerGeneros() async {
-    final moviesProvider = new MoviesProvider();
-    _genres = await moviesProvider.getGenres();
+    final serviceProvider = new ServiceProvider();
+    _genres = await serviceProvider.getGenres();
   }
 }
